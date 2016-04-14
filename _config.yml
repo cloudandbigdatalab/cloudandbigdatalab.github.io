@@ -1,0 +1,30 @@
+title_short: UTSA OCI Training
+
+title_full: UTSA Open Cloud Institute Training
+
+description: Tutorials, blog posts, and research papers on cloud computing. Topics include security, networking, Docker, OpenStack, and Hadoop. Specific examples for NSF-funded Chameleon Cloud.
+
+baseurl:
+url: "https://cloudandbigdatalab.github.com"
+
+github_username:  cloudandbigdatalab
+
+markdown: kramdown
+
+kramdown:
+  input: GFM
+
+permalink: /:categories/:year/:month/:day/:title
+
+exclude: ["src"]
+
+collections:
+  chameleon:
+    output: true
+    permalink: /chameleon/:path/
+
+defaults:
+  - scope:
+      type: chameleon
+    values:
+      layout: tutorial

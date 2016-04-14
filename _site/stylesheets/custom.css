@@ -1,0 +1,44 @@
+.textbg {
+  color: white;
+  font: bold 24px/45px Helvetica, Sans-Serif;
+  letter-spacing: -1px;
+  background: black;
+  /* fallback color */
+  background: rgba(0, 0, 0, 0.65);
+  border: 2px solid;
+  border-color: transparent;
+  border-radius: 25px;
+  padding: 15px; }
+
+.justify {
+  text-align: justify; }
+
+.navbar {
+  margin-bottom: 0px; }
+
+.jumbopic {
+  background: url("../images/cloud.jpeg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-position: 100% 290%; }
+
+svg {
+  height: 50%;
+  width: 50%; }
+
+path {
+  fill: white;
+  stroke: black;
+  stroke-width: 2;
+  stroke-linejoin: round; }
+
+path:hover {
+  fill: aliceblue;
+  stroke: lightskyblue; }
+
+.center {
+  float: none;
+  margin-left: auto;
+  margin-right: auto; }

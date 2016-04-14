@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <meta charset="utf-8">
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UTSA OCI Training - Cloud Computing - DevStack Sandbox</title>
+<meta name="description" content="Tutorials, blog posts, and research papers on cloud computing. Topics include security, networking, Docker, OpenStack, and Hadoop. Specific examples for NSF-funded Chameleon Cloud.">
+<meta name="keywords" content="Cloud and Big Data, cloud and big data lab, utsa open cloud institute, open cloud institute, UTSA OCI, Software Defined Storage, SAS, Network Function Virtualization, NFV, Big Data & Machine Learning, Cloud Computing, Cloud Storage,Containerization">
+<meta name="geo.position" content="29.424122;-98.493629">
+<meta name="geo.country" content="US">
+<meta name="geo.region" content="US-TX">
+<meta name="msvalidate.01" content="A48032010EFA0B727FEBFDA61E33014C" />
+<link rel="stylesheet" href="/stylesheets/main.css">
+<link rel="stylesheet" href="/stylesheets/custom.css">
+<script src="/javascripts/jquery-1.11.3.min.js"></script>
+<script src="/javascripts/bootstrap.min.js"></script>
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-68778127-1', 'auto');ga('send', 'pageview');
+</script>
+<link rel="canonical" href="https://cloudandbigdatalab.github.com/chameleon/cloudcomputing/devstack-sandbox/"/>
+
+
+</head>
+
+<body>
+
+  <header>
+</header>
+
+
+  <div class="container-fluid">
+
+    <div class="row">
+
+      <div class="
+      col-xs-12
+      col-sm-offset-1 col-sm-10
+      col-md-offset-2 col-md-8
+      col-lg-offset-3 col-lg-6
+      " style="margin-top: 20px; margin-bottom: 20px;">
+
+      <div class="visible-print-block">
+        <img src="/images/nsf.png" style="width: 100px; height: 100px;"></img>
+        <h1>Chameleon Cloud Tutorial</h1>
+        <p>National Science Foundation</p>
+        <p>Program Solicitation # NSF 13-602</p>
+        <p>CISE Research Infrastructure: Mid-Scale Infrastructure - NSFCloud (CRI: NSFCloud)</p>
+
+      </div>
+
+      <div class="hidden-print">
+      <ol class="breadcrumb">
+        <li><a href="/chameleon">Chameleon</a></li>
+        <li>Cloud Computing</li>
+        <li class="active">DevStack Sandbox</li>
+      </ol>
+
+      
+      
+      
+      
+
+      <a class="btn btn-default disabled" role="button" target="_blank" href=""><span class="glyphicon glyphicon-link" aria-hidden="true"></span> Lab</a>
+
+      <a class="btn btn-default disabled" role="button" target="_blank" href=""><span class="glyphicon glyphicon-film" aria-hidden="true"></span> Video</a>
+
+      <a class="btn btn-default" role="button" target="_blank" href="/pdf/chameleon-cloudcomputing-devstack-sandbox.pdf" download><span class="glyphicon glyphicon-file" aria-hidden="true"></span> PDF</a>
+    </div>
+
+      <h1>Cloud Computing - DevStack Sandbox</h1>
+
+      <h2 id="objectives">Objectives</h2>
+
+<p>In this tutorial, we will show you how to install and access DevStack on a Chameleon Cloud bare metal server.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Action</th>
+      <th>Detail</th>
+      <th>Time (min)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Create Chameleon server</td>
+      <td>You will begin by logging into Chameleon Cloud’s “Ironic” interface and creating a new server instance to run the new DevStack sandbox on.</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Create a Dedicated DevStack User</td>
+      <td>DevStack comes configured out-of-the-box to utilize a dedicated “stack” user, which we will create and configure.</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Launch DevStack</td>
+      <td>You will finish by creating a single configuration file, then launching DevStack by running a script.</td>
+      <td>20</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="prerequisites">Prerequisites</h2>
+
+<p>The following prerequisites are expected for successful completion of this tutorial:</p>
+
+<ul>
+  <li>
+    <p>Chameleon Cloud <a href="http://chameleoncloud.org/user/register/">account</a></p>
+  </li>
+  <li>
+    <p>SSH client (for Windows users, download <a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html">PuTTY</a>)</p>
+  </li>
+  <li>
+    <p>A basic knowledge of Linux</p>
+  </li>
+</ul>
+
+<h2 id="create-a-chameleon-server">1. Create a Chameleon Server</h2>
+
+<p>Login to https://ironic.chameleon.tacc.utexas.edu/dashboard/project/instances/ and create a new Chameleon Cloud server from the “Ironic” web interface with the following attributes. If no valid reservation exists, please refer to the <a href="https://www.chameleoncloud.org/docs/user-guides/technology-preview-user-guide/#provisioning_resources">Chameleon User Guide</a> or <a href="https://goo.gl/veNCdl">this video</a> for help on how to create one. See figure 1 for instance creation details.</p>
+
+<ol>
+  <li>
+    <p>Instance name: <strong>devstack-demo</strong></p>
+  </li>
+  <li>
+    <p>Availability zone: <strong>Any Availability Zone</strong></p>
+  </li>
+  <li>
+    <p>Reservation: <strong>&lt;any valid reservation&gt;</strong></p>
+  </li>
+  <li>
+    <p>Flavor: <strong>baremetal</strong></p>
+  </li>
+  <li>
+    <p>Instance count: <strong>1</strong></p>
+  </li>
+  <li>
+    <p>Instance boot source: <strong>Boot from image</strong></p>
+  </li>
+  <li>
+    <p>Image name: <strong>CC-CentOS7</strong></p>
+  </li>
+  <li>
+    <p>Click on the “<strong>Access &amp; Security</strong>” tab</p>
+  </li>
+  <li>
+    <p>Select a pre-installed SSH key from the list, or, install one by clicking on “<strong>+</strong>”</p>
+  </li>
+  <li>
+    <p>Click: <strong>Launch</strong></p>
+  </li>
+</ol>
+
+<p><img src="image5.png" alt="" /></p>
+
+<p><em>Figure 1 - Create the Chameleon Cloud Server</em></p>
+
+<p>The Chameleon Cloud server will begin building. When the server becomes available, click on the “Associate Floating IP” button at the end of its row. Select an available IP address from the list and click on “<strong>Associate</strong>”. See figure 2 below for details. Make note of this new IP address, as we will need it to complete the next step.</p>
+
+<p><img src="image6.png" alt="" /></p>
+
+<p><em>Figure 2 – Associate a Floating IP Address dialog box</em></p>
+
+<p>Now we can connect to the new server via SSH using the floating IP address we just assigned. If you are a Linux or Mac user, type the following command in a new Terminal window (Windows users: follow along using PuTTY):</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>ssh cc@Floating.IP.Address
+</code></pre>
+</div>
+
+<h2 id="add-a-dedicated-devstack-user">2. Add a dedicated DevStack user</h2>
+
+<p>We need to add a user with sudo privileges in order to install DevStack. Use the following commands to accomplish these tasks:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo adduser stack
+sudo sh –c ‘echo <span class="s2">"stack ALL=(ALL) NOPASSWD: ALL"</span> &gt;&gt; /etc/sudoers’
+</code></pre>
+</div>
+
+<p>We now need to copy our SSH public key to the new user, allowing us to login to that account.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo mkdir /home/stack/.ssh
+sudo cp ~/.ssh/authorized<span class="se">\_</span>keys /home/stack/.ssh/
+sudo chown -R stack:stack /home/stack/.ssh
+</code></pre>
+</div>
+
+<p>From here on, we should use the new stack user we just created. We can now log out of the cc user account, and log back into the server as the stack user, as seen below:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>ssh stack@Floating.IP.Address
+</code></pre>
+</div>
+
+<h2 id="launch-devstack">3. Launch DevStack</h2>
+
+<p>Once we get logged back onto the server as the stack user, we will execute the following commands in order to download DevStack to its own folder in our home directory.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nb">cd</span> ~
+git clone https://git.openstack.org/openstack-dev/devstack
+<span class="nb">cd </span>devstack
+</code></pre>
+</div>
+
+<p>Next, we want to create a local.conf configuration file inside the devstack directory, and ensure its contents appear exactly as shown below, except where indicated. In order to create and edit this file, we can either use the built-in text editor vi, or download the significantly more user friendly editor named nano. If you do not have prior experience using vi it is recommended you execute the following instruction in order to download and use nano to create the configuration file. Otherwise, create the file using vi if you are comfortable doing so.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo yum -y install nano
+
+nano ~/devstack/local.conf
+
+| local.conf                         |
+|------------------------------------|
+| <span class="o">[[</span><span class="nb">local</span>|localrc]]                  |
+| <span class="nv">FLOATING_RANGE</span><span class="o">=</span>10.12.0.240/28      |
+| <span class="nv">FIXED_RANGE</span><span class="o">=</span>192.168.1.0/24         |
+| <span class="nv">FIXED_NETWORK_SIZE</span><span class="o">=</span>256             |
+| <span class="nv">FLAT_INTERFACE</span><span class="o">=</span>eno1                |
+| <span class="nv">SERVICE_TOKEN</span><span class="o">=</span>azertytoken          |
+| <span class="nv">ADMIN_PASSWORD</span><span class="o">=</span>secret              |
+| <span class="nv">MYSQL_PASSWORD</span><span class="o">=</span>secretdb            |
+| <span class="nv">RABBIT_PASSWORD</span><span class="o">=</span>stackqueue         |
+| <span class="nv">SERVICE_PASSWORD</span><span class="o">=</span><span class="nv">$ADMIN_PASSWORD</span>   |
+| <span class="nv">HOST_IP</span><span class="o">=</span>Your.Server.IP.Address     |
+</code></pre>
+</div>
+
+<p>Ensure that your server’s IP address is accurately reflected in the HOST_IP field of the configuration file. Note that this is different from the floating IP address we associated with the server. The host IP address can be seen in the Chameleon dashboard directly <em>above</em> your instance’s floating IP address, and should begin with “10.”.</p>
+
+<p>Finally, launch DevStack by executing the script: <code class="highlighter-rouge">./stack.sh</code></p>
+
+<p>Approximately 20 minutes later, your installation should be finished, and you should receive a message similar to the following:</p>
+
+<p><img src="image7.png" alt="" />
+<em>Figure 3 – Final output of stack.sh script</em></p>
+
+<p>You’re DevStack sandbox is now up and running. You can connect to it using your web browser and the “Horizon is now available at” web address displayed in the output.</p>
+
+
+    </div>
+
+    </div>
+
+    <!--
+    <div class="row"><div class="col-xs-12 col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6 col-xl-offset-4 col-xl-4">
+
+    <div id="disqus_thread" style="margin-top: 20px; margin-bottom: 20px;"></div>
+    <script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'cloudandbigdatalab';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+</div></div>
+-->
+
+</div>
+
+<footer>
+  <hr>
+  <div class="container-fluid text-center">
+    <p>
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&repo=cloudandbigdatalab.github.io&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&repo=cloudandbigdatalab.github.io&type=watch&count=true&v=2" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&repo=cloudandbigdatalab.github.io&type=fork&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&type=follow&count=true" frameborder="0" scrolling="0" width="200px" height="20px"></iframe>
+    </p>
+    <div class="row" style="display:inline-block;vertical-align:middle;">
+       <div class="col-xs-6 col-lg-2">
+	       <a href="https://www.ci.uchicago.edu"> <img src ="../images/logos/ci.png" alt="Computer Institute." style="width: auto; height: 120px; padding: 20px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2" style="padding:25px;">
+	       <a href="https://www.tacc.utexas.edu"><img src ="../images/logos/tacc.svg" alt="Texas Advanced Computing Center" style="width: auto; height: 70px; padding: 20px;"></a>
+       </div>
+       <div class="col-xs-6 col-lg-2" style="padding:25px;">
+	       <a href="http://www.icair.org"> <img src="../images/logos/icair.png" alt="international Center for Internet Research." style="width: auto; height: 75px; padding: 20px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2" style="padding:40px;">
+	       <a href="https://www.osu.edu">  <img src="../images/logos/osu.jpg" style="height:" alt="Ohio State University" style="width: auto; height: 90px; padding: 25px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2">
+	       <a href="http://www.utsa.edu"> <img src="../images/logos/utsa.png" alt="University of Texas at San Antonio" style="width: auto; height: 120px; padding: 20px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2">
+	       <a href="http://www.nsf.gov"> <img src="../images/logos/nsf.jpg" alt="National Security Foundation" style="width: auto; height: 120px; padding: 20px;"></img></a>
+       </div>
+    <hr>
+    &nbsp;
+    <p style="padding-top:1em;font-size=1.25em; text-align:center;">Chameleon Cloud is funded by a grant from the National Science Foundation.</p>
+
+  </div>
+</footer>
+
+
+</body>
+
+</html>

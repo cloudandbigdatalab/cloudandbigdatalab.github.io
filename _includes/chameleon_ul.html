@@ -1,0 +1,15 @@
+{% assign items = include.items %}
+{% assign path = include.path %}
+
+<ul style="padding-bottom: 20px;" class="list-unstyled">
+{% for item in items %}
+  {% assign url = "/chameleon/" | append: path | append: "/" | append: item | append: "/" %}
+
+  {% for doc in site.chameleon %}
+    {% if url == doc.url %}
+      <li><a href="{{ doc.url }}"><h5>{{ doc.title }}</h5></a></li>
+    {% endif %}
+  {% endfor %}
+
+{% endfor %}
+</ul>

@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <meta charset="utf-8">
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UTSA OCI Training - Big Data and Machine Learning - Getting Started</title>
+<meta name="description" content="Tutorials, blog posts, and research papers on cloud computing. Topics include security, networking, Docker, OpenStack, and Hadoop. Specific examples for NSF-funded Chameleon Cloud.">
+<meta name="keywords" content="Cloud and Big Data, cloud and big data lab, utsa open cloud institute, open cloud institute, UTSA OCI, Software Defined Storage, SAS, Network Function Virtualization, NFV, Big Data & Machine Learning, Cloud Computing, Cloud Storage,Containerization">
+<meta name="geo.position" content="29.424122;-98.493629">
+<meta name="geo.country" content="US">
+<meta name="geo.region" content="US-TX">
+<meta name="msvalidate.01" content="A48032010EFA0B727FEBFDA61E33014C" />
+<link rel="stylesheet" href="/stylesheets/main.css">
+<link rel="stylesheet" href="/stylesheets/custom.css">
+<script src="/javascripts/jquery-1.11.3.min.js"></script>
+<script src="/javascripts/bootstrap.min.js"></script>
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-68778127-1', 'auto');ga('send', 'pageview');
+</script>
+<link rel="canonical" href="https://cloudandbigdatalab.github.com/chameleon/cloudcomputing/getting-started/"/>
+
+
+</head>
+
+<body>
+
+  <header>
+</header>
+
+
+  <div class="container-fluid">
+
+    <div class="row">
+
+      <div class="
+      col-xs-12
+      col-sm-offset-1 col-sm-10
+      col-md-offset-2 col-md-8
+      col-lg-offset-3 col-lg-6
+      " style="margin-top: 20px; margin-bottom: 20px;">
+
+      <div class="visible-print-block">
+        <img src="/images/nsf.png" style="width: 100px; height: 100px;"></img>
+        <h1>Chameleon Cloud Tutorial</h1>
+        <p>National Science Foundation</p>
+        <p>Program Solicitation # NSF 13-602</p>
+        <p>CISE Research Infrastructure: Mid-Scale Infrastructure - NSFCloud (CRI: NSFCloud)</p>
+
+      </div>
+
+      <div class="hidden-print">
+      <ol class="breadcrumb">
+        <li><a href="/chameleon">Chameleon</a></li>
+        <li>Big Data and Machine Learning</li>
+        <li class="active">Getting Started</li>
+      </ol>
+
+      
+      
+      
+      
+
+      <a class="btn btn-default " role="button" target="_blank" href="https://www.chameleoncloud.org/login/"><span class="glyphicon glyphicon-link" aria-hidden="true"></span> Lab</a>
+
+      <a class="btn btn-default " role="button" target="_blank" href="https://youtu.be/_tiEK2At438"><span class="glyphicon glyphicon-film" aria-hidden="true"></span> Video</a>
+
+      <a class="btn btn-default" role="button" target="_blank" href="/pdf/chameleon-cloudcomputing-getting-started.pdf" download><span class="glyphicon glyphicon-file" aria-hidden="true"></span> PDF</a>
+    </div>
+
+      <h1>Big Data and Machine Learning - Getting Started</h1>
+
+      <h2 id="objectives">Objectives</h2>
+
+<p>In this tutorial, you will learn how to create a Chameleon account and use the Chameleon resource leasing process to create on-demand bare metal servers using the Chameleon user interface.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Action</th>
+      <th>Detail</th>
+      <th>Time (min)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Register for a Chameleon User Account</td>
+      <td>You will learn how to register for your own Chameleon account, and how to utilize its basic features.</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Create a Sample Project</td>
+      <td>To begin, we will walk through the Chameleon user interface capabilities, such as reservation, leasing, server provisioning, private/public IP addresses, networks, and more.</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Add Users to the Project</td>
+      <td>To begin, we will walk through the Chameleon user interface capabilities, such as reservation, leasing, server provisioning, private/public IP addresses, networks, and more.</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Launch a Chameleon Cloud Bare Metal Server</td>
+      <td>Lastly, you will learn how to create and log in to a new bare metal instance on Chameleon Cloud using your new Chameleon Cloud account.</td>
+      <td>15</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="prerequisites">Prerequisites</h2>
+
+<p>The following prerequisites are expected for successful completion of this tutorial:</p>
+
+<ul>
+  <li>
+    <p>An SSH client (Windows users: download <a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html">PuTTY</a></p>
+  </li>
+  <li>
+    <p>A basic knowledge of Linux</p>
+  </li>
+</ul>
+
+<h2 id="step-1-register-for-a-chameleon-cloud-user-account">Step 1: Register for a Chameleon Cloud user account</h2>
+
+<p>In this step, you will create your very own Chameleon Cloud user account. However, before we begin, it will be useful to define some Chameleon Cloud terminology and the relationship between these entities. A Chameleon user account, which we will register for below, is required to create projects. A project, in turn, can have any number of other Chameleon users associated with it. As such, users added to a project are known as “project users” for that project. Projects will also have resources, such as a number of bare metal servers, associated with them. Together, these concepts form a hierarchy:</p>
+
+<p><img src="image5.png" alt="" /></p>
+
+<p>To begin, Go to the <a href="https://whttps://www.chameleoncloud.org/">Chameleon Cloud homepage</a></p>
+
+<p><img src="image6.png" alt="" /></p>
+
+<p>Find and click on the “Users” button located in the upper right-hand corner of the page. <strong>Click on “Register” from the pop-up menu</strong> that appears.</p>
+
+<p><img src="image7.png" alt="" /></p>
+
+<p><strong>Complete the “Contact Information” and “Account Information” forms.</strong> You will be given the option called “PI Eligibility”. The PI (or Principal Investigator) of an institute has the ability to create projects. Non-PI users can be added to a project, but cannot create their own projects. <strong>When finished, click on “Save Profile”. You will soon receive an email notification regarding account creation completion.</strong></p>
+
+<p><img src="image8.png" alt="" /></p>
+
+<p>You will be taken back to the Chameleon Cloud homepage with a message notifying you to check your email for account verification.</p>
+
+<p><img src="image9.png" alt="" /></p>
+
+<p>You should receive an email instructing you to click on a link in order to confirm your email address. Upon doing so, you will be taken to an email confirmation page where you are asked to provide your Chameleon username. After doing so, click on “Verify”.</p>
+
+<p><img src="image10.png" alt="" /></p>
+
+<p>If your information matches, you will receive a message indicating successful verification, and will be directed to login to Chameleon for the first time.</p>
+
+<h2 id="step-2-create-a-sample-project">Step 2: Create a Sample Project</h2>
+
+<p>If not already there, login to the <a href="https://chameleoncloud.org/login/">Chameleon website</a></p>
+
+<p><img src="image11.png" alt="" /></p>
+
+<p>Upon successfully logging in, you will be asked to <strong>accept the Chameleon User Terms and Conditions</strong>. Click “Accept” to proceed.</p>
+
+<p><img src="image12.png" alt="" /></p>
+
+<p>Each time you log in, you will be taken to your Dashboard, where you can manage your projects, help desk tickets, as well as your account settings. As we wish to create a new project, <strong>click on the “Manage your Projects”</strong> button.</p>
+
+<p><img src="image13.png" alt="" /></p>
+
+<p>You will be told you do not currently have any projects. <strong>Click on the “Create Project” button</strong> in the upper right-hand corner of the page to continue.</p>
+
+<p><img src="image14.png" alt="" /></p>
+
+<p>You should then be presented with and asked to <strong>accept the Project Lead Terms and Conditions</strong>. Click “Accept” to proceed.</p>
+
+<p><img src="image15.png" alt="" /></p>
+
+<p>You will then need to <strong>complete the “Create a New Project” form</strong> by providing a title, description, and type. A Project ID will be automatically generated and assigned – it is displayed on this page for your reference. When you are satisfied with your input, <strong>click on “Create Project”</strong>.</p>
+
+<p><img src="image16.png" alt="" /></p>
+
+<p>You will then be taken to view the new project’s details. It is on this page that you can add project users. <strong>At this point, the project’s “Allocation” status will be reported as “Chameleon <em>Pending</em>”. Check in regularly to see when your project’s allocation has been approved.</strong></p>
+
+<p><img src="image17.png" alt="" /></p>
+
+<h2 id="step-3-add-users-to-the-project">Step 3: Add Users to the Project</h2>
+
+<p>If you have not done so already, as a PI user, login to the <a href="https://chameleoncloud.org/login/">Chameleon website</a>.</p>
+
+<p>On your Dashboard, <strong>click on the “Manage Your Projects” button</strong>.</p>
+
+<p><img src="image13.png" alt="" /></p>
+
+<p><strong>Click on the desired project’s “View Project” button</strong>.</p>
+
+<p><img src="image18.png" alt="" /></p>
+
+<p>Scroll down to view the “Project Users” area. <strong>In the textbox labeled “Add a User to Project”, enter the username</strong> of the user you would like to add to the project, then <strong>click the “Add user” button</strong>.</p>
+
+<p><img src="image19.png" alt="" /></p>
+
+<p>Repeat this process as necessary until all desired users have been added to the project.</p>
+
+<h2 id="step-4-launch-a-chameleon-cloud-bare-metal-server">Step 4: Launch a Chameleon Cloud Bare Metal Server</h2>
+
+<p>In this section, we will show you how to launch your own bare metal servers on Chameleon. The technology preview of Chameleon gives access to bare-metal compute resources on which users can have administrative access to run cloud computing experiments with a high degree of customization and repeatability. Typically, an experiment will go through several phases:</p>
+
+<h3 id="discovering-resources">4.0 Discovering resources</h3>
+
+<p>All physical resources available to users through the Chameleon technology preview are described in the Chameleon <a href="https://www.chameleoncloud.org/user/discovery/">resource registry</a> where users may browse and learn about all the resources available in the Chameleon technology preview.
+By default, the resource discovery web interface displays all nodes of the test bed. They can be filtered using the controls on the right side of the page.</p>
+
+<p><img src="image20.png" alt="" /></p>
+
+<p>For example, three nodes of the Alamo cluster have a 1 TB disk as a second drive. To list information for only these nodes, click on the corresponding checkbox:</p>
+
+<p><img src="image21.png" alt="" /></p>
+
+<h3 id="create-a-reservation-lease">4.1 Create a reservation lease</h3>
+
+<p>Physical resources on the Chameleon technology preview must be reserved before using them for an experiment. Once a reservation has been accepted, users are guaranteed that resources will be available at the time they chose (except in extraordinary circumstances such as hardware or platform failures), which will help to run large scale experiments.</p>
+
+<p>To begin, login to the <a href="https://ironic.chameleon.tacc.utexas.edu/dashboard/auth/login/">Chameleon Resource Provisioning Dashboard</a>.</p>
+
+<p><img src="image22.png" alt="" /></p>
+
+<p>You should land on the Compute overview page for your default project. The pie charts on the page will show you what the current usage of things like instances and floating IPs is relative to the limit for your project. The usage summary will show historical usage of your project for a time period that can be selected. The usage box will show information about the instances currently running in your project.</p>
+
+<p><img src="image23.png" alt="" /></p>
+
+<p><strong>To access the reservation system, click on “Reservations”, then “Leases”.</strong></p>
+
+<p><img src="image24.png" alt="" /></p>
+
+<p>To discover when resources are available, you may access the lease calendar. This will display a Gantt chart of the reservations which allows you to find when resources are available. The Y axis represents the different physical nodes in the system and the X axis represents time.</p>
+
+<p><img src="image25.png" alt="" /></p>
+
+<p>Once you have chosen a time period when you want to reserve resources, go back to the Leases screen and <strong>click on “Create Lease”</strong>. It should bring up the window displayed below:</p>
+
+<p><img src="image26.png" alt="" /></p>
+
+<ol>
+  <li>
+    <p>Pick a name for the lease. This name needs to be unique across your project. This example uses the name my-first-lease.</p>
+  </li>
+  <li>
+    <p>Pick a start time; if you want to create your lease soon pick a start time in the near future. Note that it must be entered in UTC! You can get the UTC time by running “date -u” in your terminal.</p>
+  </li>
+  <li>
+    <p>Pick an end time. Similarly, you must use UTC.</p>
+  </li>
+  <li>
+    <p>Choose the number of hosts, it is 1 by default.</p>
+  </li>
+  <li>
+    <p><strong>After completing the “Create New Lease” form, click on the “Create” button</strong>.</p>
+
+    <p><img src="image27.png" alt="" /></p>
+
+    <p>Once created the lease details will be displayed. At the bottom of the page are the details about the reservation. Initially the reservation is in the Pending status, and stays in this state until we reach the start time.</p>
+
+    <p><img src="image28.png" alt="" /></p>
+
+    <p>Once the start time of the lease is reached, the lease will be started and its reservation will change to “Active”; you may need to refresh the page to see this.</p>
+
+    <p><img src="image29.png" alt="" /></p>
+  </li>
+</ol>
+
+<h3 id="import-public-key-pair">4.2) Import Public Key Pair</h3>
+
+<p><strong>Once your lease is started, you are almost ready to start an instance. But first, you need to make sure that you will be able to connect to it by setting up a key pair. This only has to be done once per user per project. **Click on the “Access &amp; Security” section, then click the “Key Pairs” tab.</strong></p>
+
+<p><img src="image30.png" alt="" /></p>
+
+<p>Here you can either get Chameleon to create an SSH key pair for you via the “Create Key Pair” button. If you already have an SSH key pair on your machine and are happy to use it, <strong>click on “Import Key Pair”</strong>.</p>
+
+<p>Enter a name for the key pair, for example “laptop”. In the “Public Key” box, copy the content of your SSH public key. Typically it will be at ~/.ssh/id_rsa.pub. To create your own key pair, execute the command:</p>
+
+<p>ssh-keygen –t rsa –f cloud.key</p>
+
+<p><strong>Copy the contents of the cloud.key.pub file, then simply paste into the “Public Key” box and click on “Import Key Pair”</strong>.</p>
+
+<p><img src="image31.png" alt="" /></p>
+
+<p>You should now see a list of known key pairs, with the one you just added.</p>
+
+<p><img src="image32.png" alt="" /></p>
+
+<h3 id="launch-an-instance-using-public-key-pair">4.3) Launch an Instance using Public Key Pair</h3>
+
+<p>Now that we have a valid key pair published, we can proceed with creating a new server. <strong>Click on the “Instances” tab</strong> under “Compute”, where we can create, manage, and delete servers on demand.</p>
+
+<p><img src="image33.png" alt="" /></p>
+
+<p>Next, <strong>click on the “Launch Instance” button.</strong></p>
+
+<p><img src="image34.png" alt="" /></p>
+
+<p>Create a Chameleon server with the following attributes.</p>
+
+<ol>
+  <li>
+    <p>Instance name: **test-<your name="">**</your></p>
+  </li>
+  <li>
+    <p>Availability zone: <strong>Any Availability Zone</strong></p>
+  </li>
+  <li>
+    <p>Reservation: **<any reservation="" listed="">**</any></p>
+  </li>
+  <li>
+    <p>Flavor: <strong>baremetal</strong></p>
+  </li>
+  <li>
+    <p>Instance count: <strong>1</strong></p>
+  </li>
+  <li>
+    <p>Instance boot source: <strong>Boot from image</strong></p>
+  </li>
+  <li>
+    <p>Image name: <strong>CC-CentOS7</strong></p>
+  </li>
+  <li>
+    <p>Click on the “<strong>Access &amp; Security</strong>” tab</p>
+  </li>
+  <li>
+    <p>Select <em>your key pair</em> from the list.</p>
+  </li>
+  <li>
+    <p>Click: <strong>Launch</strong></p>
+  </li>
+</ol>
+
+<p><img src="image35.png" alt="" /></p>
+
+<p><img src="image36.png" alt="" /></p>
+
+<p>Your Chameleon Cloud server will begin building.</p>
+
+<h3 id="assign-floating-ip-for-public-access">4.4) Assign Floating IP for Public Access</h3>
+
+<p>When the server becomes available, <strong>click on the “Associate Floating IP” button</strong> at the end of its row. Select an available IP address from the list and <strong>click on “Associate”</strong>. Make note of this new IP address, as we will need it to complete the next step.</p>
+
+<p><img src="image37.png" alt="" /></p>
+
+<p>Now SSH into your new server using the new floating IP address.</p>
+
+<p>[proxyuser@proxy ~]$ ssh cc@your.floating.ip.address
+The authenticity of host ‘your.floating.ip.address (your.floating.ip.address)’ can’t be established.
+ECDSA key fingerprint is 3d:4e:d1:a0:e8:d9:e6:19:a2:8a:79:48:66:c5:01:1d.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added ‘your.floating.ip.address’ (ECDSA) to the list of known hosts.
+[cc@Hadoop-test ~]$</p>
+
+<p>Ensure you are logging in using the cc account on any servers you create using this method.</p>
+
+<p><strong>Appendix A: Generating and Using SSH Key Pairs on Windows Platforms</strong></p>
+
+<p>First, we will need to download tools to generate our key pair, as well as an SSH client that can make use of them. These tools are called PuTTYGen and PuTTY, respectively.</p>
+
+<p>The location to download PuTTYGen is: <a href="http://the.earth.li/~sgtatham/putty/latest/x86/puttygen.exe">http://the.earth.li/~sgtatham/putty/latest/x86/puttygen.exe</a>
+The location to download PuTTY is: <a href="http://the.earth.li/~sgtatham/putty/latest/x86/putty.exe">http://the.earth.li/~sgtatham/putty/latest/x86/putty.exe</a></p>
+
+<p>Download and run the PuTTYGen executable:</p>
+
+<p><img src="image38.png" alt="" /></p>
+
+<p>Click on the “Generate” button and move your mouse as indicated in order to generate enough random movement with which to help create your new key pair. When the process has completed, you may enter a password into the “Key passphrase” input box in order to protect your private key.</p>
+
+<p><img src="image39.png" alt="" /></p>
+
+<p>Click on the “Save private key” button and save this file to a location you can easily recall later.</p>
+
+<p>Copy the text in the “Public key for pasting into OpenSSH authorized_keys file:” input field. This is your public key that will be input into the Chameleon cloud web interface.</p>
+
+<p><img src="image40.png" alt="" /></p>
+
+<p>To connect to a Chameleon server, download and execute the PuTTY tool. Enter the public IP address into the “Host Name (or IP address)” input box.</p>
+
+<p><img src="image41.png" alt="" /></p>
+
+<p>Next, in order to specify a private key file, click on the Connection → SSH → Auth menu item on the left. Click on the “Browse” button and select your private key file.</p>
+
+<p><img src="image42.png" alt="" /></p>
+
+<p>Finally, click the “Open” button to connect using this key.</p>
+
+
+    </div>
+
+    </div>
+
+    <!--
+    <div class="row"><div class="col-xs-12 col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6 col-xl-offset-4 col-xl-4">
+
+    <div id="disqus_thread" style="margin-top: 20px; margin-bottom: 20px;"></div>
+    <script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'cloudandbigdatalab';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+</div></div>
+-->
+
+</div>
+
+<footer>
+  <hr>
+  <div class="container-fluid text-center">
+    <p>
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&repo=cloudandbigdatalab.github.io&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&repo=cloudandbigdatalab.github.io&type=watch&count=true&v=2" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&repo=cloudandbigdatalab.github.io&type=fork&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&type=follow&count=true" frameborder="0" scrolling="0" width="200px" height="20px"></iframe>
+    </p>
+    <div class="row" style="display:inline-block;vertical-align:middle;">
+       <div class="col-xs-6 col-lg-2">
+	       <a href="https://www.ci.uchicago.edu"> <img src ="../images/logos/ci.png" alt="Computer Institute." style="width: auto; height: 120px; padding: 20px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2" style="padding:25px;">
+	       <a href="https://www.tacc.utexas.edu"><img src ="../images/logos/tacc.svg" alt="Texas Advanced Computing Center" style="width: auto; height: 70px; padding: 20px;"></a>
+       </div>
+       <div class="col-xs-6 col-lg-2" style="padding:25px;">
+	       <a href="http://www.icair.org"> <img src="../images/logos/icair.png" alt="international Center for Internet Research." style="width: auto; height: 75px; padding: 20px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2" style="padding:40px;">
+	       <a href="https://www.osu.edu">  <img src="../images/logos/osu.jpg" style="height:" alt="Ohio State University" style="width: auto; height: 90px; padding: 25px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2">
+	       <a href="http://www.utsa.edu"> <img src="../images/logos/utsa.png" alt="University of Texas at San Antonio" style="width: auto; height: 120px; padding: 20px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2">
+	       <a href="http://www.nsf.gov"> <img src="../images/logos/nsf.jpg" alt="National Security Foundation" style="width: auto; height: 120px; padding: 20px;"></img></a>
+       </div>
+    <hr>
+    &nbsp;
+    <p style="padding-top:1em;font-size=1.25em; text-align:center;">Chameleon Cloud is funded by a grant from the National Science Foundation.</p>
+
+  </div>
+</footer>
+
+
+</body>
+
+</html>

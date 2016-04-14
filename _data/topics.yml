@@ -1,0 +1,29 @@
+- title: Cloud Computing
+  description: Cloud computing is a model for enabling ubiquitous, convenient, on-demand access to a shared pool of configurable computing resources. Cloud solutions provide users and enterprises with various capabilities to store and process their data.
+  image:  glyphicon glyphicon-cloud
+  link:  href="http://cloudandbigdatalab.github.io/OSCAR/" target="_blank"
+
+- title: Cyber Secuirty
+  description: Cyber Security is the body of technologies, processes and practices designed to protect networks, computers, programs and data from attack, damage or unauthorized access. In a computing context, the term security implies cybers ecurity.
+  image: glyphicon glyphicon-lock
+  link: href="\#Coming-Soon"
+
+- title: Big Data and Machine Learning
+  description:  Machine learning is the study of pattern recognition and computational learning theory in artificial intelligence. Big data is a broad term for data sets so large or complex that traditional data processing applications are inadequate.
+  image:  glyphicon glyphicon-equalizer
+  link: href="\#Coming-Soon"
+
+- title: Docker, Containers, and Scheduling
+  description: Containerization is a server-virtualization method where the kernel of an operating system allows for multiple isolated user-space instances, instead of just one. Such instances may look and feel like a real server from the point of view of its owners and users.
+  image:  glyphicon glyphicon-object-align-vertical
+  link: href="\#Coming-Soon"
+
+- title: Mobile Cloud Computing
+  description:  Mobile computing is human–computer interaction by which a computer is expected to be transported during normal usage. Mobile computing involves mobile communication, mobile hardware, and mobile software that is minimized for mobile use.
+  image:  glyphicon glyphicon-phone
+  link: href="\#Coming-Soon"
+  
+- title: Network Function Virtualization
+  description: Network-Function Virtualization (NFV) is a network architecture concept that uses the technologies of IT virtualization to virtualize entire classes of network node functions into building blocks that may connect, or chain together, to create communication services.
+  image: glyphicon glyphicon-open
+  link: href="\#Coming-Soon"

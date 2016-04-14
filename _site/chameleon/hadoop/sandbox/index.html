@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <meta charset="utf-8">
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UTSA OCI Training - Cloud Storage - Sandbox</title>
+<meta name="description" content="Tutorials, blog posts, and research papers on cloud computing. Topics include security, networking, Docker, OpenStack, and Hadoop. Specific examples for NSF-funded Chameleon Cloud.">
+<meta name="keywords" content="Cloud and Big Data, cloud and big data lab, utsa open cloud institute, open cloud institute, UTSA OCI, Software Defined Storage, SAS, Network Function Virtualization, NFV, Big Data & Machine Learning, Cloud Computing, Cloud Storage,Containerization">
+<meta name="geo.position" content="29.424122;-98.493629">
+<meta name="geo.country" content="US">
+<meta name="geo.region" content="US-TX">
+<meta name="msvalidate.01" content="A48032010EFA0B727FEBFDA61E33014C" />
+<link rel="stylesheet" href="/stylesheets/main.css">
+<link rel="stylesheet" href="/stylesheets/custom.css">
+<script src="/javascripts/jquery-1.11.3.min.js"></script>
+<script src="/javascripts/bootstrap.min.js"></script>
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-68778127-1', 'auto');ga('send', 'pageview');
+</script>
+<link rel="canonical" href="https://cloudandbigdatalab.github.com/chameleon/hadoop/sandbox/"/>
+
+
+</head>
+
+<body>
+
+  <header>
+</header>
+
+
+  <div class="container-fluid">
+
+    <div class="row">
+
+      <div class="
+      col-xs-12
+      col-sm-offset-1 col-sm-10
+      col-md-offset-2 col-md-8
+      col-lg-offset-3 col-lg-6
+      " style="margin-top: 20px; margin-bottom: 20px;">
+
+      <div class="visible-print-block">
+        <img src="/images/nsf.png" style="width: 100px; height: 100px;"></img>
+        <h1>Chameleon Cloud Tutorial</h1>
+        <p>National Science Foundation</p>
+        <p>Program Solicitation # NSF 13-602</p>
+        <p>CISE Research Infrastructure: Mid-Scale Infrastructure - NSFCloud (CRI: NSFCloud)</p>
+
+      </div>
+
+      <div class="hidden-print">
+      <ol class="breadcrumb">
+        <li><a href="/chameleon">Chameleon</a></li>
+        <li>Cloud Storage</li>
+        <li class="active">Sandbox</li>
+      </ol>
+
+      
+      
+      
+      
+
+      <a class="btn btn-default disabled" role="button" target="_blank" href=""><span class="glyphicon glyphicon-link" aria-hidden="true"></span> Lab</a>
+
+      <a class="btn btn-default disabled" role="button" target="_blank" href=""><span class="glyphicon glyphicon-film" aria-hidden="true"></span> Video</a>
+
+      <a class="btn btn-default" role="button" target="_blank" href="/pdf/chameleon-hadoop-sandbox.pdf" download><span class="glyphicon glyphicon-file" aria-hidden="true"></span> PDF</a>
+    </div>
+
+      <h1>Cloud Storage - Sandbox</h1>
+
+      
+<h2 id="objectives">Objectives</h2>
+
+<p>In this tutorial, we will show you how to build a single-node Hadoop cluster on top of a bare metal Chameleon Cloud server.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Action</th>
+      <th>Detail</th>
+      <th>Time (min)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Create Chameleon server</td>
+      <td>You will begin by logging into Chameleon Cloud’s “Ironic” interface and creating a new server instance to run the new Hadoop sandbox on.</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Download and Configure Hadoop</td>
+      <td>Here we will configure our environment as required for Hadoop to install and run properly.</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Run a Sample Map Reduce Program</td>
+      <td>Once we have have Hadoop up and running, we will execute a simple “grep-like” regular expressions matching program.</td>
+      <td>5</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="prerequisites">Prerequisites</h2>
+
+<p>The following prerequisites are expected for successful completion of this tutorial:</p>
+
+<ul>
+  <li>
+    <p>Chameleon Cloud account (http://chameleoncloud.org/user/register/)</p>
+  </li>
+  <li>
+    <p>SSH client (Windows users: download <a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html">PuTTY</a></p>
+  </li>
+  <li>
+    <p>A basic knowledge of Linux</p>
+  </li>
+</ul>
+
+<h2 id="installation-process">Installation Process</h2>
+
+<p>In this tutorial, we will be setting up a one-node cluster and running a sample application on it, producing output.</p>
+
+<h2 id="create-a-cloud-server">1. Create a cloud Server</h2>
+
+<p>Login to https://ironic.chameleon.tacc.utexas.edu/dashboard/project/instances/ and create a Chameleon Cloud Server from the web interface with the following attributes. If no valid reservation exists, please refer to the <a href="https://www.chameleoncloud.org/docs/user-guides/technology-preview-user-guide/#provisioning_resources">Chameleon User Guide</a> or <a href="https://goo.gl/veNCdl">this video</a> for how to create one. See figure 1 for details.</p>
+
+<ol>
+  <li>
+    <p>Instance name: <strong>yourname</strong></p>
+  </li>
+  <li>
+    <p>Availability zone: <strong>Any Availability Zone</strong></p>
+  </li>
+  <li>
+    <p>Reservation: **<any valid="" reservation="">**</any></p>
+  </li>
+  <li>
+    <p>Flavor: <strong>baremetal</strong></p>
+  </li>
+  <li>
+    <p>Instance count: <strong>1</strong></p>
+  </li>
+  <li>
+    <p>Instance boot source: <strong>Boot from image</strong></p>
+  </li>
+  <li>
+    <p>Image name: <strong>CC-CentOS7</strong></p>
+  </li>
+  <li>
+    <p>Click on the “<strong>Access &amp; Security</strong>” tab</p>
+  </li>
+  <li>
+    <p>Select a pre-installed SSH key from the list, or, install one by clicking on “<strong>+</strong>”</p>
+  </li>
+  <li>
+    <p>Click: <strong>Launch</strong></p>
+  </li>
+</ol>
+
+<p><img src="/images/chameleon/hadoop/sandbox/image5.png" alt="" /></p>
+
+<p><em>Figure 1 - Create the Chameleon Cloud Server</em></p>
+
+<p>The Chameleon Cloud server will begin building. When the server becomes available, click on the “Associate Floating IP” button at the end of its row. Select an available IP address from the list and click on “<strong>Associate</strong>”. See figure 2 below for details. Make note of this new IP address, as we will need it to complete the next step.</p>
+
+<p><img src="/images/chameleon/hadoop/sandbox/image6.png" alt="" /></p>
+
+<p><em>Figure 2 – Associate a Floating IP Address dialog box</em></p>
+
+<h2 id="download-and-configure-hadoop">2. Download and Configure Hadoop</h2>
+
+<p>SSH into the server using the floating IP address you recorded in the last step:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>ssh cc&lt;Your Server IP&gt;
+</code></pre>
+</div>
+
+<p>After logging in, execute the following command to download wget:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo yum install wget -y
+</code></pre>
+</div>
+
+<p>When completed, download the Hadoop 2.6.0 binary tarball by executing the next command:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>wget ftp://apache.mirrors.pair.com/hadoop/common/hadoop-2.6.0/hadoop-2.6.0.tar.gz
+</code></pre>
+</div>
+
+<p>Extract the contents of the archive:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>tar -xvzf hadoop-2.6.0.tar.gz
+</code></pre>
+</div>
+
+<p>We now want to setup passwordless SSH. To do this also need to generate an SSH key pair, which we can accomplish by executing:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>ssh-keygen -t rsa
+</code></pre>
+</div>
+
+<p>You will be prompted for a filename and a passphrase during this process. Leave both blank, as seen below:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Creating SSH key
+
+Generating public/private rsa key pair.
+
+Enter file in which to save the key (/home/stack/.ssh/id_rsa):
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+</code></pre>
+</div>
+
+<p>We will want to copy the newly created public key to the authorized keys file for this user account:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>cat ~/.ssh/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys
+</code></pre>
+</div>
+
+<p>Prior to running Hadoop, we must install Java:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo yum install java-1.8.0-openjdk.x86_64 -y
+</code></pre>
+</div>
+
+<p>Next, we will need to export several environment variables that Hadoop will need to run properly, by typing the following lengthy command:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nb">echo export </span><span class="nv">HADOOP_HOME</span><span class="o">=</span>/home/cc/hadoop-2.6.0 <span class="nv">HADOOP_INSTALL</span><span class="o">=</span><span class="nv">$HADOOP_HOME</span> <span class="nv">HADOOP_MAPRED_HOME</span><span class="o">=</span><span class="nv">$HADOOP_HOME</span> <span class="nv">HADOOP_COMMON_HOME</span><span class="o">=</span><span class="nv">$HADOOP_HOME</span> <span class="nv">HADOOP_HDFS_HOME</span><span class="o">=</span><span class="nv">$HADOOP_HOME</span> <span class="nv">YARN_HOME</span><span class="o">=</span><span class="nv">$HADOOP_HOME</span> <span class="nv">HADOOP_COMMON_LIB_NATIVE_DIR</span><span class="o">=</span><span class="nv">$HADOOP_HOME</span>/lib/native <span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:<span class="nv">$HADOOP_HOME</span>/sbin:<span class="nv">$HADOOP_HOME</span>/bin <span class="nv">JAVA_HOME</span><span class="o">=</span>/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.45-30.b13.el7_1.x86_64/jre/ &gt;&gt; ~/.bashrc
+</code></pre>
+</div>
+
+<p>Then, we will ensure these variables remain in our local environment by reloading the .bashrc file:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nb">source</span> ~/.bashrc
+</code></pre>
+</div>
+
+<p>Next, we will change directories into the extracted Hadoop folder and execute the following commands which will, respectively, format a new distributed filesystem and start the Hadoop daemons:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nb">cd</span> ~/hadoop-2.6.0
+bin/hdfs namenode –format
+sbin/start-dfs.sh
+sbin/start-yarn.sh
+</code></pre>
+</div>
+
+<p><strong>Note:</strong> You will also be asked twice if you would like to continue connecting to a host whose authenticity cannot be established. Type “<strong>yes</strong>” when so prompted.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[ … ]
+Starting namenodes on [localhost]
+The authenticity of host 'localhost (::1)' can't be established.
+ECDSA key fingerprint is 4d:e0:bc:c6:1a:f3:11:4a:84:e6:b6:65:b2:05:02:6c.
+Are you sure you want to continue connecting (yes/no)? yes
+</code></pre>
+</div>
+
+<h2 id="run-a-sample-map-reduce-program">3. Run a Sample Map Reduce Program</h2>
+
+<p>We will then build the input and output directories which our sample Map Reduce program will use:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>bin/hadoop fs –put etc/hadoop input
+</code></pre>
+</div>
+
+<p>Now we can run our sample Map Reduce program:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>bin/hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-2.6.0.jar grep input output <span class="s1">'dfs[a-z.]+'</span>
+</code></pre>
+</div>
+
+<p>And finally, we can gather the results of our program:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>bin/hadoop fs -cat output/<span class="k">*</span>
+</code></pre>
+</div>
+
+<p>The example program performs a word search (essentially mimicking grep) on the unpackaged Hadoop configuration directory, searching for matches for the regular expression ‘dfs[a-z.]+’. The output is then displayed on your screen.</p>
+
+<p>Additionally, the server is browsable by directing your web browser to http://Your-Server-IP:50070/ where “Your-Server-IP” represents the floating IP address assigned to your instance. Various server parameters can be found here, including the input and output files related to the sample Map Reduce program.</p>
+
+<p>Finally, when you’re done, you may stop the Hadoop daemons by executing:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sbin/stop-dfs.sh
+sbin/stop-yarn.sh
+</code></pre>
+</div>
+
+
+    </div>
+
+    </div>
+
+    <!--
+    <div class="row"><div class="col-xs-12 col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6 col-xl-offset-4 col-xl-4">
+
+    <div id="disqus_thread" style="margin-top: 20px; margin-bottom: 20px;"></div>
+    <script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'cloudandbigdatalab';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+</div></div>
+-->
+
+</div>
+
+<footer>
+  <hr>
+  <div class="container-fluid text-center">
+    <p>
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&repo=cloudandbigdatalab.github.io&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&repo=cloudandbigdatalab.github.io&type=watch&count=true&v=2" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&repo=cloudandbigdatalab.github.io&type=fork&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&type=follow&count=true" frameborder="0" scrolling="0" width="200px" height="20px"></iframe>
+    </p>
+    <div class="row" style="display:inline-block;vertical-align:middle;">
+       <div class="col-xs-6 col-lg-2">
+	       <a href="https://www.ci.uchicago.edu"> <img src ="../images/logos/ci.png" alt="Computer Institute." style="width: auto; height: 120px; padding: 20px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2" style="padding:25px;">
+	       <a href="https://www.tacc.utexas.edu"><img src ="../images/logos/tacc.svg" alt="Texas Advanced Computing Center" style="width: auto; height: 70px; padding: 20px;"></a>
+       </div>
+       <div class="col-xs-6 col-lg-2" style="padding:25px;">
+	       <a href="http://www.icair.org"> <img src="../images/logos/icair.png" alt="international Center for Internet Research." style="width: auto; height: 75px; padding: 20px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2" style="padding:40px;">
+	       <a href="https://www.osu.edu">  <img src="../images/logos/osu.jpg" style="height:" alt="Ohio State University" style="width: auto; height: 90px; padding: 25px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2">
+	       <a href="http://www.utsa.edu"> <img src="../images/logos/utsa.png" alt="University of Texas at San Antonio" style="width: auto; height: 120px; padding: 20px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2">
+	       <a href="http://www.nsf.gov"> <img src="../images/logos/nsf.jpg" alt="National Security Foundation" style="width: auto; height: 120px; padding: 20px;"></img></a>
+       </div>
+    <hr>
+    &nbsp;
+    <p style="padding-top:1em;font-size=1.25em; text-align:center;">Chameleon Cloud is funded by a grant from the National Science Foundation.</p>
+
+  </div>
+</footer>
+
+
+</body>
+
+</html>

@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <meta charset="utf-8">
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UTSA OCI Training - Dockers and Micro services - Kubernetes Intro</title>
+<meta name="description" content="Tutorials, blog posts, and research papers on cloud computing. Topics include security, networking, Docker, OpenStack, and Hadoop. Specific examples for NSF-funded Chameleon Cloud.">
+<meta name="keywords" content="Cloud and Big Data, cloud and big data lab, utsa open cloud institute, open cloud institute, UTSA OCI, Software Defined Storage, SAS, Network Function Virtualization, NFV, Big Data & Machine Learning, Cloud Computing, Cloud Storage,Containerization">
+<meta name="geo.position" content="29.424122;-98.493629">
+<meta name="geo.country" content="US">
+<meta name="geo.region" content="US-TX">
+<meta name="msvalidate.01" content="A48032010EFA0B727FEBFDA61E33014C" />
+<link rel="stylesheet" href="/stylesheets/main.css">
+<link rel="stylesheet" href="/stylesheets/custom.css">
+<script src="/javascripts/jquery-1.11.3.min.js"></script>
+<script src="/javascripts/bootstrap.min.js"></script>
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-68778127-1', 'auto');ga('send', 'pageview');
+</script>
+<link rel="canonical" href="https://cloudandbigdatalab.github.com/chameleon/docker/kubernetes/"/>
+
+
+</head>
+
+<body>
+
+  <header>
+</header>
+
+
+  <div class="container-fluid">
+
+    <div class="row">
+
+      <div class="
+      col-xs-12
+      col-sm-offset-1 col-sm-10
+      col-md-offset-2 col-md-8
+      col-lg-offset-3 col-lg-6
+      " style="margin-top: 20px; margin-bottom: 20px;">
+
+      <div class="visible-print-block">
+        <img src="/images/nsf.png" style="width: 100px; height: 100px;"></img>
+        <h1>Chameleon Cloud Tutorial</h1>
+        <p>National Science Foundation</p>
+        <p>Program Solicitation # NSF 13-602</p>
+        <p>CISE Research Infrastructure: Mid-Scale Infrastructure - NSFCloud (CRI: NSFCloud)</p>
+
+      </div>
+
+      <div class="hidden-print">
+      <ol class="breadcrumb">
+        <li><a href="/chameleon">Chameleon</a></li>
+        <li>Dockers and Micro services</li>
+        <li class="active">Kubernetes Intro</li>
+      </ol>
+
+      
+      
+      
+      
+
+      <a class="btn btn-default disabled" role="button" target="_blank" href=""><span class="glyphicon glyphicon-link" aria-hidden="true"></span> Lab</a>
+
+      <a class="btn btn-default disabled" role="button" target="_blank" href=""><span class="glyphicon glyphicon-film" aria-hidden="true"></span> Video</a>
+
+      <a class="btn btn-default" role="button" target="_blank" href="/pdf/chameleon-docker-kubernetes.pdf" download><span class="glyphicon glyphicon-file" aria-hidden="true"></span> PDF</a>
+    </div>
+
+      <h1>Dockers and Micro services - Kubernetes Intro</h1>
+
+      
+<h2 id="objectives">Objectives</h2>
+
+<p>In this tutorial, you will be walked through the basic installation of Kubernetes on the currently available CentOS images provided by Chameleon. Following installation, the guide will continue on to explain the basics and advanced usage of Kubernetes.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Action</th>
+      <th>Detail</th>
+      <th>Time (min)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Setting Up Kubernetes</td>
+      <td>To begin, users will be shown the steps necessary to install Kubernetes on a Chameleon Bare Metal Server.</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Simple Uses of Kubernetes</td>
+      <td>Here, users will be demonstrated the several differnt uses of Kubernetes ranging from simple deployments to creating Services to run a webservice.</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Using Setup Files With Kubernetes</td>
+      <td>Finally, we will demonstrate how to create files that will setup an application for us to build up and tear down at will.</td>
+      <td>5</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="prerequisites">Prerequisites</h2>
+
+<p>The following prerequisites are expected for successful completion of this tutorial:</p>
+
+<ul>
+  <li>
+    <p>A Chameleon user account</p>
+  </li>
+  <li>
+    <p>An active project in the Chameleon Dashboard with appropriate administrative permissions.</p>
+  </li>
+  <li>
+    <p>Two active instances accesible by one another through a network connection.</p>
+  </li>
+</ul>
+
+<h2 id="step-1-setting-up-kubernetes">Step 1: Setting Up Kubernetes</h2>
+
+<p>Kubernetes is a system used to control a wide number of hosts for the purpose of deploying and managin containerized applications. In our specific setup, we will be using Kubernetes in association with Docker to serve as our application container system. The fundamental idea behind Kubernetes, beyond the setup stage, is that, as the user, there is no need to know about which host an application is running on. This serves the purpose of requiring the user to only need to focus on the application and not have to worry about the specifics of the host or management.</p>
+
+<p>The setup of Kubernetes relies on a single host serving as a <strong>Master</strong> that will serve as the primary controller that will manage the Kubernetes installation. Any additional hosts that are to be used for application deployment are defined as a <strong>Node</strong> (previously described as a <strong>Minion</strong> in prior documentation). For the tutorial, the design will be to assign one single instance as the Master and the second as the Node.</p>
+
+<p><strong>NOTE: At the time of this writing, Kubernetes is currently in a beta state. This means that the design is constantly evolving and subject to change, possibly invalidating parts of this tutorial, though the general idea should remain the same throughout. To keep up to date with the latest on Kubernetes, please visit their current development <a href="https://github.com/googlecloudplatform/kubernetes">site</a>.</strong></p>
+
+<p>For our purposes, this tutorial will begin with the installation of Kubernetes.</p>
+
+<p>First, we need to visit the list of instances and find the two instances we wish to use for our installation.</p>
+
+<p><img src="/images/chameleon/docker/kubernetes/1.png" alt="" /></p>
+
+<p>Take note of the local area network ip addresses of each instance and decide which host will be the Master and which will be the Node. In this scenario, 10.12.0.26, will be appointed as the Master. 10.12.0.110 will be the Node.</p>
+
+<p>Go ahead and connect to the Master instance to begin installation. Please note that the machines are being connected to through SSH using appropriate aliases as defined in ~/.ssh/config.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">[</span>bill@windows] ssh cloud
+</code></pre>
+</div>
+
+<p>Once logged in, we need to install Kubernetes and etcd so that the instance may act as the Master. Using the yum package manager, install both packages.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">[</span>cc@joseph-mpq055-n01] sudo yum -y install etcd kubernetes
+</code></pre>
+</div>
+
+<p>From here, the installation will have installed all the appropriate configuration files into the /etc/kubernetes/ directory that we will need to modify.</p>
+
+<p>For the file <strong>/etc/kubernetes/apiserver</strong>, ensure the following lines are uncommented and edited to match what is shown:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nv">KUBE_API_ADDRESS</span><span class="o">=</span><span class="s2">"--address=0.0.0.0"</span>
+<span class="nv">KUBE_API_PORT</span><span class="o">=</span><span class="s2">"--port=8080"</span>
+<span class="nv">KUBELET_PORT</span><span class="o">=</span><span class="s2">"--kubelet_port=10250"</span>
+</code></pre>
+</div>
+
+<p>In addition, add the following line to the end of the file (where kubernetes-master is replaced by the Master instance’s local ip address e.g., 10.12.0.26 for our scenario):</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nv">KUBE_MASTER</span><span class="o">=</span><span class="s2">"--master=http://kubernetes-master:8080"</span>
+</code></pre>
+</div>
+
+<p>For the file <strong>/etc/kubernetes/controller-manager</strong>, edit the following line to reflect (where kubernetes-node is replaced by the Node instance’s local ip address e.g. 10.12.0.110 in our scenario):</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nv">KUBELET_ADDRESSES</span><span class="o">=</span><span class="s2">"--machines=kubernetes-node"</span>
+</code></pre>
+</div>
+
+<p>Now, we will go through a similar process for the Node instance. Connect to the secondary instance.</p>
+
+<p>Install kubernetes using yum.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">[</span>cc@joseph-mpq055-n02] sudo yum -y install kubernetes
+</code></pre>
+</div>
+
+<p>Due to this instance being the node, the configuration files will need to be altered in a slightly different manner than previously with the master.</p>
+
+<p>For the file <strong>/etc/kubernetes/apiserver</strong>, ensure the following line is uncommented and edited to match what is shown:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nv">KUBE_ETCD_SERVERS</span><span class="o">=</span><span class="s2">"--etcd_servers=http://kubernetes-master:4001"</span>
+</code></pre>
+</div>
+
+<p>For the file <strong>/etc/kubernetes/config</strong>, ensure the following line is uncommented and altered to match what is shown:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nv">KUBE_MASTER</span><span class="o">=</span><span class="s2">"--master=http://kubernetes-master:8080"</span>
+</code></pre>
+</div>
+
+<p>In addition, add the following line:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nv">KUBE_ETCD_SERVERS</span><span class="o">=</span><span class="s2">"--etcd_servers=http://kubernetes-master:4001"</span>
+</code></pre>
+</div>
+
+<p>For the file <strong>/etc/kubernetes/kubelet</strong>, ensure the following lines are uncommented and edited to match what is shown:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nv">KUBELET_ADDRESS</span><span class="o">=</span><span class="s2">"-address=0.0.0.0"</span>
+<span class="nv">KUBELET_PORT</span><span class="o">=</span><span class="s2">"--port=10250"</span>
+<span class="nv">KUBELET_HOSTNAME</span><span class="o">=</span><span class="s2">"--hostname_override=kubernetes-node"</span>
+<span class="nv">KUBELET_API_SERVER</span><span class="o">=</span><span class="s2">"--api_servers=http://kubernetes-master:8080"</span>
+</code></pre>
+</div>
+
+<p>For the file <strong>/etc/kubernetes/proxy</strong>, ensure the following line is uncommented and edited to match what is shown:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nv">KUBE_PROXY_ARGS</span><span class="o">=</span><span class="s2">"--master=http://kubernetes-master:8080"</span>
+</code></pre>
+</div>
+
+<p>On the Master (the first host), we need to restart the service in order for the configuration changes to take effect. Additionally, we will enable each service so that is will start at boot for the server.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">[</span>cc@joseph-mpq055-n01] <span class="k">for </span>cmd <span class="k">in </span>restart <span class="nb">enable </span>status; <span class="k">do </span>sudo systemctl <span class="nv">$cmd</span> etcd kube-apiserver kube-scheduler kube-controller-manager; <span class="k">done</span>
+</code></pre>
+</div>
+
+<p>The Node (the second host) will also need to restart and enable similar services.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">[</span>cc@joseph-mpq055-n02] <span class="k">for </span>cmd <span class="k">in </span>restart <span class="nb">enable </span>status; <span class="k">do </span>sudo systemctl <span class="nv">$cmd</span> kube-proxy kubelet docker; <span class="k">done</span>
+</code></pre>
+</div>
+
+<p>Now that all the services are enabled and restarted with the new configurations, we can now begin to manipulate and deploy across the Kubernetes cluster.</p>
+
+<h2 id="step-2-simple-uses-of-kubernetes">Step 2: Simple Uses of Kubernetes</h2>
+
+<p>Now that we have the Kubernetes system in place, we can now use it to deploy applications. As mentioned before, the Master controls the entirety of Kubernetes, so each of these commands will be run on the Master host/instance that we set up previously. In our example, this would be the 10.12.0.26 machine. To start off with, we will take a look at the attached nodes using the followin command.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">[</span>cc@joseph-mpq055-n01] kubectl get nodes
+NAME          LABELS                               STATUS
+10.12.0.110   kubernetes.io/hostname<span class="o">=</span>10.12.0.110   Ready
+</code></pre>
+</div>
+
+<p>We can see the attached node at 10.12.0.110 showing that the Master recognizes the attached Node.</p>
+
+<p>The command, <strong>kubectl</strong> (Kubernetes Control), is the primary command used to interact with Kubernetes and the attached cluster. Passing <strong>get</strong> to the command is similar to reading variables with the final argument being <strong>nodes</strong>, any and all attached nodes that are responding will be displayed the same as above. We will see this command used further in later examples.</p>
+
+<p>For the next section, we will being talking about Pods. <strong>Pods</strong> are a container or group of containers that are typically meant to be run together to create a <strong>Service</strong>. There are a few main terms and concepts that need to be explained before advancing further.</p>
+
+<p>To begin with, we must first go aobut defining what a <strong>Pod</strong> is in the Kubernetes environment. A pod is defined as a collection of any number of containers or applications that are to interact with one another as though they existed on the same machine. This is used in the same sense that a multi-container application would be used for within Docker alone. It is recommended that any and all applications that exist within a single pod be very tightly related to the point where it is almost a necessity that they exist on the same host. Typically, the more you can segment out a large project into separate pods the better. This is thanks to the fact that you can then scale each pod individually from each other based on their independent needs and usage to optimize resources overall.</p>
+
+<p>A <strong>Service</strong> is a unique abstraction of Kubernetes that behaves in the sense of directing network traffic and flow within the cluster. Each pod is self contained and will remain so unless explicitly exposed by a service. In defining a pod, you can also define a label for the pod that Kubernetes can use to distinguish one type of pod from another. These labels are used by services in order to succesfully direct incoming and outgoing packets. Usually, services are first used internally to expose ports from one pod to another such that a project can interact between pods. Again, this can be related back to Docker in the form of linked containers. However, services in Kubernetes go far beyond the ambassador links present in Docker. To begin with, a service defines a collection of Pods, using the labels as mentioned before, and abstracts the connection between the two. This is where the SDN (Software Defined Networking) comes into play in that the pods are only required to worry about themselves and that’s it. The relation between them is handed over to the service which decides how they interact. This is one of the features that permits Kubernetes’s built-in load balancing for deployments. For example, when working with a web server, you typically embrace a frontend and backend. By splitting these two into separate pods, you can have several instances of each used to handle the load. When the frontend need a backend, it will reach out and be picked up by the service that is currently in control. The service will then select a backend that is currently unoccupied or otherwise free from the pool of available backend pods and a momentary connection will be formed.</p>
+
+<p>To see our active pods, we will use this command:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">[</span>cc@joseph-mpq055-n01] kubectl get pods
+POD       IP        CONTAINER<span class="o">(</span>S<span class="o">)</span>   IMAGE<span class="o">(</span>S<span class="o">)</span>   HOST      LABELS    STATUS    CREATED   MESSAGE
+</code></pre>
+</div>
+
+<p>Since we have not yet created any pods, non are present at the execution of this command. Just to get started, we will begin by launching two instances of nginx that are guaranteed by a <strong>Replication Controller</strong>. A <strong>Replication Controller (RC)</strong> is a tool utilized by Kubernetes to ensure a specific number of pod instances are always running. It will either create or destroy more pods until it is within the specific amount provided. In addition, the RC will also be able to account for Node failure in order to migrate which host the pods are being hosted on without user intervention. The command we will use will be:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c"># The command is broken down into:</span>
+<span class="c">#  kubectl - The basic Kubernetes Control command.</span>
+<span class="c">#  run-container - The command used to run a container from the command line.</span>
+<span class="c">#  my-nginx - The name to be associated with this container, pod, rc, and other related items.</span>
+<span class="c">#  --image=nginx - Which Docker image to create the container from. (See Docker tutorial for more details)</span>
+<span class="c">#  --replicas=2 - The number of replicas the rc will ensure.</span>
+<span class="c">#  --port=80 - The port to expose.</span>
+<span class="o">[</span>cc@joseph-mpq055-n01] kubectl run-container my-nginx --image<span class="o">=</span>nginx --replicas<span class="o">=</span>2 --port<span class="o">=</span>80
+</code></pre>
+</div>
+
+<p>This command will spawn two nginx pods that have port 80 open to accept incoming HTTP traffic. From here, let’s take a look back at the currently existing pods.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">[</span>cc@joseph-mpq055-n01] kubectl get pods
+POD              IP        CONTAINER<span class="o">(</span>S<span class="o">)</span>   IMAGE<span class="o">(</span>S<span class="o">)</span>   HOST           LABELS                   STATUS    CREATED     MESSAGE
+my-nginx-5p2n5                                       10.12.0.110/   run-container<span class="o">=</span>my-nginx   Pending   6 seconds
+                           my-nginx       nginx
+my-nginx-valfk                                       10.12.0.110/   run-container<span class="o">=</span>my-nginx   Pending   6 seconds
+</code></pre>
+</div>
+
+<p>You can see the pods are still spawning given thei current status as <strong>Pending</strong>. Given a few more moments, the pods are now officialy in the <strong>Running</strong> state:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>POD              IP        CONTAINER<span class="o">(</span>S<span class="o">)</span>   IMAGE<span class="o">(</span>S<span class="o">)</span>   HOST           LABELS                   STATUS    CREATED     MESSAGE
+my-nginx-5p2n5                                       10.12.0.110/   run-container<span class="o">=</span>my-nginx   Running   9 seconds
+                           my-nginx       nginx
+my-nginx-valfk                                       10.12.0.110/   run-container<span class="o">=</span>my-nginx   Running   9 seconds
+                           my-nginx       nginx
+</code></pre>
+</div>
+
+<p>Now, it is important to remember that Kubernetes separates everything as much as it can. In that sense, even though we were only looking to run a container, pods were created for us automatically to contain the containers. In addition, since we specified that we always want two instances of nginx running, we have also indirectly created a Replication Controller that is used to monitor the pods. To see them, we run:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">[</span>cc@joseph-mpq055-n01] kubectl get rc
+<span class="o">[</span>cc@joseph-mpq055-n01] kubectl get rc
+CONTROLLER   CONTAINER<span class="o">(</span>S<span class="o">)</span>   IMAGE<span class="o">(</span>S<span class="o">)</span>   SELECTOR                 REPLICAS
+my-nginx     my-nginx       nginx      run-container<span class="o">=</span>my-nginx   2
+</code></pre>
+</div>
+
+<p>Now that we are done, we can simply destroy them.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">[</span>cc@joseph-mpq055-n01] kubectl delete rc my-nginx
+</code></pre>
+</div>
+
+<h2 id="step-3-using-setup-files-with-kubernetes">Step 3: Using Setup Files With Kubernetes</h2>
+
+<p>In this final section, we will go about creating a series of files that can be used to define an application. For our example, we will be recreating the same tutorial released as the Docker multi-host application in the first Docker tutorial. <a href="https://github.com/cloudandbigdatalab/tutorial-cham-docker-1">https://github.com/cloudandbigdatalab/tutorial-cham-docker-1</a></p>
+
+<p>First and foremost, it is very advantageous to create a directory where all the files will exist. The reason will be explained shortly. So start off with:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">[</span>cc@joseph-mpq055-n01] mkdir dock-app
+<span class="o">[</span>cc@joseph-mpq055-n01] <span class="nb">cd</span> !!<span class="k">*</span>
+</code></pre>
+</div>
+
+<p>Now that we are within our application’s directory-to-be, we will need to start defining how we want the application to be set up. Since the application has been created for us, we are going to cater to its original design. Luckily, since all the files are hosted on DockerHub, there is no need to go through the pain of recreating and compiling Dockerfiles for our case.</p>
+
+<p>Each file is of the YAML file format which may often seem a little odd, but is simply broken down as another way to define nested variables in a vein similar to JSON.</p>
+
+<p>Our first file will be for the main webserver and we shall call it <strong>dock-web.yaml</strong>. The contents should be:</p>
+
+<p><strong>dock-web.yaml:</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="s">apiVersion</span><span class="pi">:</span> <span class="s">v1beta3</span>
+<span class="s">kind</span><span class="pi">:</span> <span class="s">ReplicationController</span>
+<span class="s">metadata</span><span class="pi">:</span>
+  <span class="s">name</span><span class="pi">:</span> <span class="s">docker-web</span>
+  <span class="s">labels</span><span class="pi">:</span>
+    <span class="s">name</span><span class="pi">:</span> <span class="s">docker-web</span>
+<span class="s">spec</span><span class="pi">:</span>
+  <span class="s">replicas</span><span class="pi">:</span> <span class="s">2</span>
+  <span class="s">selector</span><span class="pi">:</span>
+    <span class="s">name</span><span class="pi">:</span> <span class="s">docker-web</span>
+  <span class="s">template</span><span class="pi">:</span>
+    <span class="s">metadata</span><span class="pi">:</span>
+      <span class="s">labels</span><span class="pi">:</span>
+        <span class="s">name</span><span class="pi">:</span> <span class="s">docker-web</span>
+    <span class="s">spec</span><span class="pi">:</span>
+      <span class="s">containers</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">name</span><span class="pi">:</span> <span class="s">uwsgi</span>
+        <span class="s">image</span><span class="pi">:</span> <span class="s">cloudandbigdatalab/uwsgi</span>
+      <span class="pi">-</span> <span class="s">name</span><span class="pi">:</span> <span class="s">nginx</span>
+        <span class="s">image</span><span class="pi">:</span> <span class="s">cloudandbigdatalab/nginx</span>
+        <span class="s">ports</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="s">containerPort</span><span class="pi">:</span> <span class="s">80</span>
+</code></pre>
+</div>
+
+<p>By looking at the very top of the file, we can see what exactly is being declared. The most important part of a YAML file for Kubernetes is the <strong>kind</strong> variables which defines what exactly we are creating. In this case, we can see that we are creating a Repliction Controller. Moving along, we see labels being defined in the metadata section in addition to within the spec section. <strong>spec</strong> defined the majority of the contents of the actual container, in this case, pulling the nginx and uwsgi docker containers and placing them into the same pod, exposing port 80 locally. Since in the Docker tutorial these were placed on the same host, placing them on the same pod is essentially the same. <strong>replicas</strong> is the final variable to take note of since it tells Kubernetes how many instances of the pod to run. Given that we are merely testing, we keep the number of replicas fairly small at two.</p>
+
+<p>Next, we will look at the <strong>dock-post.yaml</strong> file, the file that is used to define our second pod containing a Postgres database.</p>
+
+<p><strong>dock-post.yaml:</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="s">apiVersion</span><span class="pi">:</span> <span class="s">v1beta3</span>
+<span class="s">kind</span><span class="pi">:</span> <span class="s">ReplicationController</span>
+<span class="s">metadata</span><span class="pi">:</span>
+  <span class="s">name</span><span class="pi">:</span> <span class="s">docker-postgres</span>
+  <span class="s">labels</span><span class="pi">:</span>
+    <span class="s">name</span><span class="pi">:</span> <span class="s">docker-postgres</span>
+<span class="s">spec</span><span class="pi">:</span>
+  <span class="s">replicas</span><span class="pi">:</span> <span class="s">2</span>
+  <span class="s">selector</span><span class="pi">:</span>
+    <span class="s">name</span><span class="pi">:</span> <span class="s">docker-postgres</span>
+  <span class="s">template</span><span class="pi">:</span>
+    <span class="s">metadata</span><span class="pi">:</span>
+      <span class="s">labels</span><span class="pi">:</span>
+        <span class="s">name</span><span class="pi">:</span> <span class="s">docker-postgres</span>
+    <span class="s">spec</span><span class="pi">:</span>
+      <span class="s">containers</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">name</span><span class="pi">:</span> <span class="s">postgres</span>
+        <span class="s">image</span><span class="pi">:</span> <span class="s">cloudandbigdatalab/postgres</span>
+        <span class="s">ports</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="s">containerPort</span><span class="pi">:</span> <span class="s">5432</span>
+</code></pre>
+</div>
+
+<p>The details of this file are virtually the same as the last since we are creating another Replication Controller to manage two instances of the pod. We are pulling the postgres image from Dockerhub and exposing 5432 locally and are now leaving them available for use.</p>
+
+<p>If we were to run these two files, it would be misleading to think we are application ready since the pods are both contained and while they would exist, would not be able to communicate with one another or outside of the cluster.</p>
+
+<p>To do this, we will take a look at creating Services. The first Service to take a look at will be in the file <strong>post-dock-svc.yaml</strong>, used to define the Service overlooking the Postgres pod.</p>
+
+<p><strong>post-dock-svc.yaml:</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="s">apiVersion</span><span class="pi">:</span> <span class="s">v1beta3</span>
+<span class="s">kind</span><span class="pi">:</span> <span class="s">Service</span>
+<span class="s">metadata</span><span class="pi">:</span>
+  <span class="s">name</span><span class="pi">:</span> <span class="s">docker-post-svc</span>
+  <span class="s">labels</span><span class="pi">:</span>
+    <span class="s">name</span><span class="pi">:</span> <span class="s">docker-post-svc</span>
+<span class="s">spec</span><span class="pi">:</span>
+  <span class="s">ports</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">port</span><span class="pi">:</span> <span class="s">5432</span>
+    <span class="s">targetPort</span><span class="pi">:</span> <span class="s">5432</span>
+<span class="s">selector</span><span class="pi">:</span>
+  <span class="s">name</span><span class="pi">:</span> <span class="s">docker-post</span>
+</code></pre>
+</div>
+
+<p>Since the Postgres database is fairly simple in that it only need to connect internally to other hosts within the cluster, we can rather easily see what is being done. First, the <strong>kind</strong> has now been changed to Service, though the labels still remain. The <strong>spec</strong> section now contains <strong>port</strong> and <strong>targetPort</strong>. The reason for having two port variables is that <strong>targetPort</strong> defines which port on the pod it should look for in terms of making a connection while <strong>port</strong> defines the port Service will expose and route the traffic through. This permits users to have multiple pods locally expose the same port (e.g. 80), but then have each of them being served on different ports within the cluster to differentiate between them. Just as important is the <strong>selector</strong> structure defined. This tells the Service what it should be targeting. By providing the name of the label defined in the Replication Controller in <strong>dock-post.yaml</strong>, the Service knows where to direct traffic.</p>
+
+<p>Finally, the more complex service file is <strong>web-dock-svc.yaml</strong>. The complexity exists solely because of the desire to expose out of the cluster and through the Node.</p>
+
+<p><strong>web-dock-svc.yaml:</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="s">apiVersion</span><span class="pi">:</span> <span class="s">v1beta3</span>
+<span class="s">kind</span><span class="pi">:</span> <span class="s">Service</span>
+<span class="s">metadata</span><span class="pi">:</span>
+  <span class="s">name</span><span class="pi">:</span> <span class="s">docker-web-svc</span>
+  <span class="s">labels</span><span class="pi">:</span>
+    <span class="s">name</span><span class="pi">:</span> <span class="s">docker-web-svc</span>
+<span class="s">spec</span><span class="pi">:</span>
+  <span class="s">selector</span><span class="pi">:</span>
+    <span class="s">name</span><span class="pi">:</span> <span class="s">docker-web</span>
+  <span class="s">type</span><span class="pi">:</span> <span class="s">NodePort</span>
+  <span class="s">ports</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">port</span><span class="pi">:</span> <span class="s">80</span>
+    <span class="s">targetPort</span><span class="pi">:</span> <span class="s">80</span>
+    <span class="s">nodePort</span><span class="pi">:</span> <span class="s">30080</span>
+    <span class="s">protocol</span><span class="pi">:</span> <span class="s">TCP</span>
+</code></pre>
+</div>
+
+<p>Similar to the previous Service defined, this starts out the same, but within <strong>spec</strong>, we see a <strong>type</strong> defined. <strong>type</strong> is assigned the value of <strong>NodePort</strong> which means that the Service will expose the traffic designated on a port of the actual Node host where it ends up being hosted. More definitions in <strong>ports</strong> shows a <strong>nodePort</strong> that tells the Service which port traffic should be routed to and from. This is the first and only external connection made within the web application, meaning that everything but this one port is contained within the virtual cluster. Typically, there is no need to define a <strong>nodePort</strong> explicitly as it will automatically assign one within the range of Node Ports defined in the configuration files. In our case, especially for testing, a static port is comfortable to rely on.</p>
+
+<p>Now, the reason for placing all of the files into a single directory is to take advantage of the <strong>create</strong> and <strong>delete</strong> command we can pass to Kubernetes. Instead of bringing up and tearing down structures one at a time, we can do it all at once to greatly speedup deployment and testing. To create our application, we simply run the command:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">[</span>cc@joseph-mpq055-n01] kubectl create -f &lt;filename / dirname&gt;
+</code></pre>
+</div>
+
+<p>Since we are currently in the directory with all the files, we can use:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">[</span>cc@joseph-mpq055-n01] kubectl create -f .
+replicationcontrollers/docker-postgres
+replicationcontrollers/docker-web
+services/docker-post-svc
+services/docker-web-svc
+</code></pre>
+</div>
+
+<p>And voila, we now have an active application. While the setup is daunting, the ease of deployment and management is what makes Kubernetes worthwhile. Coupled with the load balancing and resiliance, it is hard to beat. Want to tear down your app? Run:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="o">[</span>cc@joseph-mpq055-n01] kubectl delete -f .
+replicationcontrollers/docker-postgres
+replicationcontrollers/docker-web
+services/docker-post-svc
+services/docker-web-svc
+</code></pre>
+</div>
+
+
+    </div>
+
+    </div>
+
+    <!--
+    <div class="row"><div class="col-xs-12 col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6 col-xl-offset-4 col-xl-4">
+
+    <div id="disqus_thread" style="margin-top: 20px; margin-bottom: 20px;"></div>
+    <script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'cloudandbigdatalab';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+</div></div>
+-->
+
+</div>
+
+<footer>
+  <hr>
+  <div class="container-fluid text-center">
+    <p>
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&repo=cloudandbigdatalab.github.io&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&repo=cloudandbigdatalab.github.io&type=watch&count=true&v=2" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&repo=cloudandbigdatalab.github.io&type=fork&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&type=follow&count=true" frameborder="0" scrolling="0" width="200px" height="20px"></iframe>
+    </p>
+    <div class="row" style="display:inline-block;vertical-align:middle;">
+       <div class="col-xs-6 col-lg-2">
+	       <a href="https://www.ci.uchicago.edu"> <img src ="../images/logos/ci.png" alt="Computer Institute." style="width: auto; height: 120px; padding: 20px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2" style="padding:25px;">
+	       <a href="https://www.tacc.utexas.edu"><img src ="../images/logos/tacc.svg" alt="Texas Advanced Computing Center" style="width: auto; height: 70px; padding: 20px;"></a>
+       </div>
+       <div class="col-xs-6 col-lg-2" style="padding:25px;">
+	       <a href="http://www.icair.org"> <img src="../images/logos/icair.png" alt="international Center for Internet Research." style="width: auto; height: 75px; padding: 20px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2" style="padding:40px;">
+	       <a href="https://www.osu.edu">  <img src="../images/logos/osu.jpg" style="height:" alt="Ohio State University" style="width: auto; height: 90px; padding: 25px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2">
+	       <a href="http://www.utsa.edu"> <img src="../images/logos/utsa.png" alt="University of Texas at San Antonio" style="width: auto; height: 120px; padding: 20px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2">
+	       <a href="http://www.nsf.gov"> <img src="../images/logos/nsf.jpg" alt="National Security Foundation" style="width: auto; height: 120px; padding: 20px;"></img></a>
+       </div>
+    <hr>
+    &nbsp;
+    <p style="padding-top:1em;font-size=1.25em; text-align:center;">Chameleon Cloud is funded by a grant from the National Science Foundation.</p>
+
+  </div>
+</footer>
+
+
+</body>
+
+</html>

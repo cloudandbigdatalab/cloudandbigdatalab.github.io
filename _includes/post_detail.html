@@ -1,0 +1,23 @@
+<div class="container-fluid">
+
+    <div class="row">
+
+      <div class="
+      col-xs-12
+      col-sm-offset-1 col-sm-10
+      col-md-offset-2 col-md-8
+      col-lg-offset-3 col-lg-6
+      " style="margin-top: 20px; margin-bottom: 20px;">
+			<h1 class="entry-title">
+				{% if page.title %}
+	    	<a href="{{ root_url }}{{ page.url }}">{{ page.title }}</a>
+	    	{% endif %}
+	    	{% if post.title %}
+	        <a href="{{ root_url }}{{ post.url }}">{{ post.title }}</a>
+				{% endif %}
+			</h1>
+	<div class="entry-content">{{ content }}</div>
+</div>
+</div>
+</div>
+</div>

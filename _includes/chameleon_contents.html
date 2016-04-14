@@ -1,0 +1,11 @@
+<div class="row-eq-height visible-xs-block visible-sm-block text-center">
+
+  {% for section in site.data.chameleon %}
+  <div class="col-xs-12 col-sm-3">
+  <h4>{{ section.title }}</h4>
+  {% assign section_url = section.title | downcase %}
+  {% include chameleon_ul.html items=section.docs path=section_url %}
+  </div>
+  {% endfor %}
+
+</div>

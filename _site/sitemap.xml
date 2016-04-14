@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+<url>
+  <loc>https://cloudandbigdatalab.github.io/</loc>
+  <lastmod>2015-10-13T07:44:51+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>https://cloudandbigdatalab.github.io/chameleon/index.html</loc>
+  <lastmod>2015-10-13T07:44:51+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>https://cloudandbigdatalab.github.io/chameleon/</loc>
+  <lastmod>2015-10-13T07:44:51+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>https://cloudandbigdatalab.github.io/chameleon/cloud/api/</loc>
+  <lastmod>2015-10-13T07:44:51+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>https://cloudandbigdatalab.github.io/chameleon/cloud/mpi-hpcc/</loc>
+  <lastmod>2015-10-13T07:44:51+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>https://cloudandbigdatalab.github.io/chameleon/cloud/devstack-sandbox/</loc>
+  <lastmod>2015-10-13T07:44:51+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>https://cloudandbigdatalab.github.io/chameleon/cloud/getting-started/</loc>
+  <lastmod>2015-10-13T07:44:51+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>https://cloudandbigdatalab.github.io/chameleon/cloud/block-trace/</loc>
+  <lastmod>2015-10-13T07:44:51+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>https://cloudandbigdatalab.github.io/chameleon/docker/fundamentals/</loc>
+  <lastmod>2015-10-13T07:44:51+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>https://cloudandbigdatalab.github.io/chameleon/docker/cgroups-namespaces/</loc>
+  <lastmod>2015-10-13T07:44:51+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>https://cloudandbigdatalab.github.io/chameleon/docker/kubernetes/</loc>
+  <lastmod>2015-10-13T07:44:51+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>https://cloudandbigdatalab.github.io/chameleon/docker/machine-compose-swarm/</loc>
+  <lastmod>2015-10-13T07:44:51+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>https://cloudandbigdatalab.github.io/chameleon/hadoop/sandbox/</loc>
+  <lastmod>2015-10-13T07:44:51+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>https://cloudandbigdatalab.github.io/chameleon/hadoop/mapreduce-python/</loc>
+  <lastmod>2015-10-13T07:44:51+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>https://cloudandbigdatalab.github.io/chameleon/networking/fundamentals/</loc>
+  <lastmod>2015-10-13T07:44:51+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>https://cloudandbigdatalab.github.io/chameleon/networking/security/</loc>
+  <lastmod>2015-10-13T07:44:51+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>https://cloudandbigdatalab.github.io/pdf/chameleon-cloud-api.pdf</loc>
+  <lastmod>2015-10-13T07:44:51+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>https://cloudandbigdatalab.github.io/pdf/chameleon-cloud-mpi-hpcc.pdf</loc>
+  <lastmod>2015-10-13T07:44:51+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>https://cloudandbigdatalab.github.io/pdf/chameleon-cloud-devstack-sandbox.pdf</loc>
+  <lastmod>2015-10-13T07:44:51+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>https://cloudandbigdatalab.github.io/pdf/chameleon-cloud-getting-started.pdf</loc>
+  <lastmod>2015-10-13T07:44:51+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>https://cloudandbigdatalab.github.io/pdf/chameleon-cloud-block-trace.pdf</loc>
+  <lastmod>2015-10-13T07:44:51+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>https://cloudandbigdatalab.github.io/pdf/chameleon-docker-fundamentals.pdf</loc>
+  <lastmod>2015-10-13T07:44:51+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>https://cloudandbigdatalab.github.io/pdf/chameleon-docker-cgroups-namespaces.pdf</loc>
+  <lastmod>2015-10-13T07:44:51+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>https://cloudandbigdatalab.github.io/pdf/chameleon-docker-kubernetes.pdf</loc>
+  <lastmod>2015-10-13T07:44:51+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>https://cloudandbigdatalab.github.io/pdf/chameleon-docker-machine-compose-swarm.pdf</loc>
+  <lastmod>2015-10-13T07:44:51+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>https://cloudandbigdatalab.github.io/pdf/chameleon-hadoop-sandbox.pdf</loc>
+  <lastmod>2015-10-13T07:44:51+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>https://cloudandbigdatalab.github.io/pdf/chameleon-hadoop-mapreduce-python.pdf</loc>
+  <lastmod>2015-10-13T07:44:51+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>https://cloudandbigdatalab.github.io/pdf/chameleon-networking-fundamentals.pdf</loc>
+  <lastmod>2015-10-13T07:44:51+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>https://cloudandbigdatalab.github.io/pdf/chameleon-networking-security.pdf</loc>
+  <lastmod>2015-10-13T07:44:51+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+</urlset>

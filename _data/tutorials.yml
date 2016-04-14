@@ -1,0 +1,49 @@
+- title: Getting Started
+  link: /chameleon/general/getting-started
+  lab: https://www.chameleoncloud.org/login/
+  video: https://youtu.be/_tiEK2At438
+
+- title: 'Security Fundamentals'
+  doc: 'docs/Chameleon Cloud Tutorial - Security Fundamentals.pdf'
+
+- title: 'Networking Fundamentals'
+  doc: 'docs/Chameleon Cloud Tutorial - Networking Fundamentals.pdf'
+
+- title: 'Chameleon APIs'
+  doc: 'docs/Chameleon Cloud Tutorial - APIs.pdf'
+
+- title: 'Docker Fundmamentals'
+  doc: 'https://gitprint.com/cloudandbigdatalab/tutorial-cham-docker-1/blob/master/README.md?inline'
+  lab: https://github.com/cloudandbigdatalab/tutorial-cham-docker-1
+
+- title: 'Docker Machine, Compose, and Swarm'
+  doc: 'https://gitprint.com/cloudandbigdatalab/tutorial-cham-docker-2/blob/master/README.md?inline'
+  lab: https://github.com/cloudandbigdatalab/tutorial-cham-docker-2
+
+- title: 'DevStack Sandbox'
+  doc: 'docs/Chameleon Cloud Tutorial - DevStack Sandbox.pdf'
+
+- title: 'Hadoop Sandbox'
+  doc: 'docs/Chameleon Cloud Tutorial - Hadoop Sandbox.pdf'
+
+- title: 'Block Trace'
+  doc: 'docs/Chameleon Cloud Tutorial - Block Trace.pdf'
+
+- title: Cloud Configuration Managment
+  video: https://youtu.be/lyjjU-KPsdE
+
+- title: 'Chameleon Architecture'
+
+- title: 'Software Defined Networking'
+
+- title: 'Cloud Storage'
+
+- title: 'OpenMPI'
+
+- title: 'Robot Operating System (ROS)'
+
+- title: 'Machine Learning'
+
+- title: 'OpenStack on Bare Metal'
+
+- title: 'Ceph'

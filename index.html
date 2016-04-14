@@ -1,0 +1,62 @@
+---
+layout: default
+
+title: Chameleon Cloud Training
+
+description: The Chameleon Cloud project funded by National Science Foundation (NSF) will provide a large-scale platform to the open research community allowing them to explore transformative concepts in deeply programmable cloud services, design, and core technologies. Chameleon will allow users to explore problems ranging from the creation of Software as a Service to kernel support for virtualization.
+
+
+
+nav: true
+---
+
+<script src="/javascripts/identicon.js"></script>
+<script src="/javascripts/pnglib.js"></script>
+<script src="/javascripts/sha.js"></script>
+<script src="/javascripts/setIdenticons.js"></script>
+
+<div class="jumbotron jumbopic" style="color:black;">
+  <div class="container-fluid text-center">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2">
+        <h1> {{ page.title }} </h1>
+        <h4> A configurable experimental environment for large-scale cloud research </h4>
+        <a href=""> <img src="/images/logos/chameleoncloud.png" alt="Chameleon Cloud"></img></a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2">
+        <div class="btn-group text-center">
+          <a class="btn btn-default btn-lg" href="http://frank-zhangxin.github.io" target="_blank">Chameleon eLab</a></li>
+          <a class="btn btn-default btn-lg" href="https://ironic.chameleon.tacc.utexas.edu/" target="_blank">Chameleon Dashboard</a></li>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="row">
+      <p class="text-center" style="font-size:20px;"> {{ page.description }} </p>
+      <hr>
+
+    <h2 class="text-center" style="padding:2em;"> Configurable Research Test-beds and Trainings </h2>
+      {% assign pages = site.chameleon | sort: 'title' %}
+        {% assign pages = pages | sort: 'category' %}
+
+      {% for topic in site.data.topics %}
+	      <div class="col-xs-12 col-sm-6 col-md-6" style="height:16em;">
+	    <a {{ topic.link }} >  <h2> <span class="{{ topic.image }}"> </span> {{ topic.title }}</h2></a>
+            <p style="font-size:1.25em;padding-right:40px;" class="justify">{{ topic.description }}</p>
+         </div>
+      {% endfor %}
+
+        </div>
+    </div>
+	</div>
+</div>
+
+  </div>
+  &nbsp;
+  &nbsp;

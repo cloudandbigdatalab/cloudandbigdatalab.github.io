@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <meta charset="utf-8">
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UTSA OCI Training - Cloud Computing - I/O Trace using Block Trace</title>
+<meta name="description" content="Tutorials, blog posts, and research papers on cloud computing. Topics include security, networking, Docker, OpenStack, and Hadoop. Specific examples for NSF-funded Chameleon Cloud.">
+<meta name="keywords" content="Cloud and Big Data, cloud and big data lab, utsa open cloud institute, open cloud institute, UTSA OCI, Software Defined Storage, SAS, Network Function Virtualization, NFV, Big Data & Machine Learning, Cloud Computing, Cloud Storage,Containerization">
+<meta name="geo.position" content="29.424122;-98.493629">
+<meta name="geo.country" content="US">
+<meta name="geo.region" content="US-TX">
+<meta name="msvalidate.01" content="A48032010EFA0B727FEBFDA61E33014C" />
+<link rel="stylesheet" href="/stylesheets/main.css">
+<link rel="stylesheet" href="/stylesheets/custom.css">
+<script src="/javascripts/jquery-1.11.3.min.js"></script>
+<script src="/javascripts/bootstrap.min.js"></script>
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-68778127-1', 'auto');ga('send', 'pageview');
+</script>
+<link rel="canonical" href="https://cloudandbigdatalab.github.com/chameleon/cloudcomputing/block-trace/"/>
+
+
+</head>
+
+<body>
+
+  <header>
+</header>
+
+
+  <div class="container-fluid">
+
+    <div class="row">
+
+      <div class="
+      col-xs-12
+      col-sm-offset-1 col-sm-10
+      col-md-offset-2 col-md-8
+      col-lg-offset-3 col-lg-6
+      " style="margin-top: 20px; margin-bottom: 20px;">
+
+      <div class="visible-print-block">
+        <img src="/images/nsf.png" style="width: 100px; height: 100px;"></img>
+        <h1>Chameleon Cloud Tutorial</h1>
+        <p>National Science Foundation</p>
+        <p>Program Solicitation # NSF 13-602</p>
+        <p>CISE Research Infrastructure: Mid-Scale Infrastructure - NSFCloud (CRI: NSFCloud)</p>
+
+      </div>
+
+      <div class="hidden-print">
+      <ol class="breadcrumb">
+        <li><a href="/chameleon">Chameleon</a></li>
+        <li>Cloud Computing</li>
+        <li class="active">I/O Trace using Block Trace</li>
+      </ol>
+
+      
+      
+      
+      
+
+      <a class="btn btn-default disabled" role="button" target="_blank" href=""><span class="glyphicon glyphicon-link" aria-hidden="true"></span> Lab</a>
+
+      <a class="btn btn-default disabled" role="button" target="_blank" href=""><span class="glyphicon glyphicon-film" aria-hidden="true"></span> Video</a>
+
+      <a class="btn btn-default" role="button" target="_blank" href="/pdf/chameleon-cloudcomputing-block-trace.pdf" download><span class="glyphicon glyphicon-file" aria-hidden="true"></span> PDF</a>
+    </div>
+
+      <h1>Cloud Computing - I/O Trace using Block Trace</h1>
+
+      <h2 id="objectives">Objectives</h2>
+
+<p>In this tutorial, you will learn how to install a blocktrace and how to captures all activity in the storage stack in the Linux kernel’s block layer from the OS perspective.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Action</th>
+      <th>Detail</th>
+      <th>Time (min)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Install Blocktrace in your Linux machine</td>
+      <td>You will learn how to setup a <strong>BlockTrace</strong> tool and captures all activity in the storage stack in the Linux kernel’s block layer from the OS perspective</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Install “seekwatcher” and get output image/movie.</td>
+      <td>You will learn how to setup seekwatcher to visualize block I/O patterns.</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Run Blocktrace and Create a file using “dd” that will do disk access</td>
+      <td>In this step you will learn how to make a disk access</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Run Blockparse and Seekwatcher to visualize the block I/O pattern</td>
+      <td>Lastly, trace the I/O patterns</td>
+      <td>5</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="prerequisites">Prerequisites</h2>
+
+<p>The following prerequisites are expected for successful completion of this tutorial:</p>
+
+<ul>
+  <li>
+    <p>An SSH client (Windows users: download <a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html">PuTTY</a></p>
+  </li>
+  <li>
+    <p>A basic knowledge of Linux</p>
+  </li>
+  <li>
+    <p>Install Blocktrace and Seekwatcher.</p>
+  </li>
+</ul>
+
+<h2 id="blocktrace">Blocktrace:</h2>
+
+<ul>
+  <li>
+    <p>Provides an ability to see the events going inside block i/o layer.</p>
+  </li>
+  <li>
+    <p>Using it, it is possible to generate events for all I/O request and monitor it from beginning.</p>
+  </li>
+  <li>
+    <p>It has low overhead, less that 2%.</p>
+  </li>
+</ul>
+
+<h2 id="architecture-level">Architecture level:</h2>
+
+<p>The following diagram illustrates the the level at which blktrace captures the IO workload. Blktrace captures events up to the driver level and operates one level higher than a bus trace does.</p>
+
+<p><img src="image2.png" alt="" /></p>
+
+<h2 id="why-blocktrace">Why blocktrace?</h2>
+
+<p>It can provide a valuable way to test multi-drive workload, because the trace occurs at the logical layer prior to the physical layer. By tracing the logical layer all drives can be traced at once, where a bus trace would be limited by drive numbers. Every operating system is logging all the access its doing and so one can get a pretty broad picture of accesses.</p>
+
+<p><img src="image3.png" alt="" /></p>
+
+<h2 id="events-captured">Events Captured:</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Action</th>
+      <th>Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>A</td>
+      <td>Remap</td>
+      <td>I/O was remapped to different device.</td>
+    </tr>
+    <tr>
+      <td>B</td>
+      <td>Bounced</td>
+      <td>The data pages attached to this bio are not reachable by the hardware and must be bounced to a lower memory location.</td>
+    </tr>
+    <tr>
+      <td>C</td>
+      <td>Completion</td>
+      <td>I/O Completion.</td>
+    </tr>
+    <tr>
+      <td>D</td>
+      <td>Issued</td>
+      <td>I/O issued to driver.</td>
+    </tr>
+    <tr>
+      <td>F</td>
+      <td>Front merge</td>
+      <td>I/O ends where a previously inserted requests starts</td>
+    </tr>
+    <tr>
+      <td>G</td>
+      <td>Get request</td>
+      <td>To send any type of request to a block device, a struct request container must be allocated first</td>
+    </tr>
+    <tr>
+      <td>I</td>
+      <td>Inserted</td>
+      <td>A request is being sent to the i/o scheduler for addition to the internal queue and later service by the driver.</td>
+    </tr>
+    <tr>
+      <td>M</td>
+      <td>Back merge</td>
+      <td>A previously inserted request exists that ends on the boundary of where this I/O begins, so the i/o scheduler can merge them together.</td>
+    </tr>
+    <tr>
+      <td>P</td>
+      <td>Plug</td>
+      <td>When I/O is queued to a previously empty block device queue</td>
+    </tr>
+    <tr>
+      <td>Q</td>
+      <td> </td>
+      <td>I/O request handled by queue code.</td>
+    </tr>
+    <tr>
+      <td>S</td>
+      <td>Sleep</td>
+      <td>No available request structures were available, so the issuer has to wait for one to be freed.</td>
+    </tr>
+    <tr>
+      <td>T</td>
+      <td>Unplug(timer)</td>
+      <td>unplug due to timer</td>
+    </tr>
+    <tr>
+      <td>U</td>
+      <td>Unplug</td>
+      <td>Some request data already queued in the device, start sending requests to the driver.</td>
+    </tr>
+    <tr>
+      <td>X</td>
+      <td>Split</td>
+      <td>An incoming I/O may straddle a device or internal zone and needs to be chopped up into smaller pieces for service.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="hands-on">Hands-on</h2>
+
+<h3 id="step-1-install-blocktrace-in-your-linux-machine">Step 1: Install Blocktrace in your Linux machine</h3>
+
+<p>In this step, you will –Install Block trace, if not there.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>root@rack1-1:~\# apt-get install blktrace
+</code></pre>
+</div>
+
+<h3 id="step-2-install-seekwatcher-and-get-output-imagemovie">Step 2: Install “seekwatcher” and get output image/movie.</h3>
+
+<p>In this step, you will –Install seekwatcher, if not there.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>root@rack1-1:~\# apt-get install seekwatcher
+</code></pre>
+</div>
+
+<h3 id="step-3-run-blocktrace-and-create-a-file-using-dd-that-will-do-disk-access">Step 3: Run Blocktrace and Create a file using “dd” that will do disk access</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>blktrace /dev/sda &amp;
+
+if=/dev/zero of=abc.bin bs=1MB count=1000
+</code></pre>
+</div>
+
+<p>NOTE : kill the blktrace process using process id and then run blockparse</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>root@rack1-1:~\# kill (pid)
+</code></pre>
+</div>
+
+<h3 id="step-4-run-block-parse-and-seekwatcher-to-visualize-block-io-pattern">Step 4: Run block parse and seekwatcher to visualize block i/o pattern</h3>
+
+<p>In this step, you will –Use blkparse and seekwatcher to visualize I/O patterns.</p>
+
+<p>Blkparse : In this step you can monitor the drive you want and also pipe the selected output in text file.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>blkparse –i sda.blktrace.7 –f “%a,%S,%t\\n” | sed –n ‘/\[CD\]/ p’ &gt; result.txt
+</code></pre>
+</div>
+
+<p>Seekwatcher : In this step, it will give you .png format image of disk IO, Throughput, Seek Count, IOPs</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>seekwatcher --io-graph-marker-size=5 -t tracenew5.blktrace.8 -o new5-dd1.png --dpi 200
+</code></pre>
+</div>
+
+
+    </div>
+
+    </div>
+
+    <!--
+    <div class="row"><div class="col-xs-12 col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6 col-xl-offset-4 col-xl-4">
+
+    <div id="disqus_thread" style="margin-top: 20px; margin-bottom: 20px;"></div>
+    <script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'cloudandbigdatalab';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+</div></div>
+-->
+
+</div>
+
+<footer>
+  <hr>
+  <div class="container-fluid text-center">
+    <p>
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&repo=cloudandbigdatalab.github.io&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&repo=cloudandbigdatalab.github.io&type=watch&count=true&v=2" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&repo=cloudandbigdatalab.github.io&type=fork&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&type=follow&count=true" frameborder="0" scrolling="0" width="200px" height="20px"></iframe>
+    </p>
+    <div class="row" style="display:inline-block;vertical-align:middle;">
+       <div class="col-xs-6 col-lg-2">
+	       <a href="https://www.ci.uchicago.edu"> <img src ="../images/logos/ci.png" alt="Computer Institute." style="width: auto; height: 120px; padding: 20px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2" style="padding:25px;">
+	       <a href="https://www.tacc.utexas.edu"><img src ="../images/logos/tacc.svg" alt="Texas Advanced Computing Center" style="width: auto; height: 70px; padding: 20px;"></a>
+       </div>
+       <div class="col-xs-6 col-lg-2" style="padding:25px;">
+	       <a href="http://www.icair.org"> <img src="../images/logos/icair.png" alt="international Center for Internet Research." style="width: auto; height: 75px; padding: 20px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2" style="padding:40px;">
+	       <a href="https://www.osu.edu">  <img src="../images/logos/osu.jpg" style="height:" alt="Ohio State University" style="width: auto; height: 90px; padding: 25px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2">
+	       <a href="http://www.utsa.edu"> <img src="../images/logos/utsa.png" alt="University of Texas at San Antonio" style="width: auto; height: 120px; padding: 20px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2">
+	       <a href="http://www.nsf.gov"> <img src="../images/logos/nsf.jpg" alt="National Security Foundation" style="width: auto; height: 120px; padding: 20px;"></img></a>
+       </div>
+    <hr>
+    &nbsp;
+    <p style="padding-top:1em;font-size=1.25em; text-align:center;">Chameleon Cloud is funded by a grant from the National Science Foundation.</p>
+
+  </div>
+</footer>
+
+
+</body>
+
+</html>

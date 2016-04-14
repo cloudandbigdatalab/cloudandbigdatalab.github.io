@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <meta charset="utf-8">
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UTSA OCI Training - Big Data and Machine Learning - MPI and HPCC</title>
+<meta name="description" content="Tutorials, blog posts, and research papers on cloud computing. Topics include security, networking, Docker, OpenStack, and Hadoop. Specific examples for NSF-funded Chameleon Cloud.">
+<meta name="keywords" content="Cloud and Big Data, cloud and big data lab, utsa open cloud institute, open cloud institute, UTSA OCI, Software Defined Storage, SAS, Network Function Virtualization, NFV, Big Data & Machine Learning, Cloud Computing, Cloud Storage,Containerization">
+<meta name="geo.position" content="29.424122;-98.493629">
+<meta name="geo.country" content="US">
+<meta name="geo.region" content="US-TX">
+<meta name="msvalidate.01" content="A48032010EFA0B727FEBFDA61E33014C" />
+<link rel="stylesheet" href="/stylesheets/main.css">
+<link rel="stylesheet" href="/stylesheets/custom.css">
+<script src="/javascripts/jquery-1.11.3.min.js"></script>
+<script src="/javascripts/bootstrap.min.js"></script>
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-68778127-1', 'auto');ga('send', 'pageview');
+</script>
+<link rel="canonical" href="https://cloudandbigdatalab.github.com/chameleon/cloudcomputing/mpi-hpcc/"/>
+
+
+</head>
+
+<body>
+
+  <header>
+</header>
+
+
+  <div class="container-fluid">
+
+    <div class="row">
+
+      <div class="
+      col-xs-12
+      col-sm-offset-1 col-sm-10
+      col-md-offset-2 col-md-8
+      col-lg-offset-3 col-lg-6
+      " style="margin-top: 20px; margin-bottom: 20px;">
+
+      <div class="visible-print-block">
+        <img src="/images/nsf.png" style="width: 100px; height: 100px;"></img>
+        <h1>Chameleon Cloud Tutorial</h1>
+        <p>National Science Foundation</p>
+        <p>Program Solicitation # NSF 13-602</p>
+        <p>CISE Research Infrastructure: Mid-Scale Infrastructure - NSFCloud (CRI: NSFCloud)</p>
+
+      </div>
+
+      <div class="hidden-print">
+      <ol class="breadcrumb">
+        <li><a href="/chameleon">Chameleon</a></li>
+        <li>Big Data and Machine Learning</li>
+        <li class="active">MPI and HPCC</li>
+      </ol>
+
+      
+      
+      
+      
+
+      <a class="btn btn-default disabled" role="button" target="_blank" href=""><span class="glyphicon glyphicon-link" aria-hidden="true"></span> Lab</a>
+
+      <a class="btn btn-default disabled" role="button" target="_blank" href=""><span class="glyphicon glyphicon-film" aria-hidden="true"></span> Video</a>
+
+      <a class="btn btn-default" role="button" target="_blank" href="/pdf/chameleon-cloudcomputing-mpi-hpcc.pdf" download><span class="glyphicon glyphicon-file" aria-hidden="true"></span> PDF</a>
+    </div>
+
+      <h1>Big Data and Machine Learning - MPI and HPCC</h1>
+
+      <h2 id="objectives">Objectives</h2>
+
+<p>In this tutorial, you will learn about Open MPI and HPCC on Chameleon machines.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Action</th>
+      <th>Detail</th>
+      <th>Time (min)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Introduction of OPEN MPI</td>
+      <td>You will learn what is OPEN MPI and how it works with Open Stack.</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Password less authentication</td>
+      <td> </td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Installation of Open MPI</td>
+      <td>To begin, we will learn the process of installing Open MPI</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>HPCC Introduction and installation</td>
+      <td>We will discuss about HPCC introduction and installation.</td>
+      <td>15</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>MPI and HPCC on Chameloen machines</td>
+      <td>Lastly, we will implement the HPC and MPI on Chameleon machines.</td>
+      <td>10</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+  <li>Knowledge of MPI and HPCC</li>
+  <li>A SSH Client(how to use SSH)</li>
+  <li>Basic Knowledge of LINUX</li>
+  <li>Basic knowledge on Open Stack applications.</li>
+</ul>
+
+<h3 id="what-is-mpi">What is MPI?</h3>
+
+<p><strong>Message Passing Interface</strong>
+MPI is a library specification for message-passing, proposed as a standard by a broadly based committee of vendors, implementors, and users wh ich is designed for high performance on both massively parallel machines and on workstation clusters.</p>
+
+<h3 id="what-is-open-mpi">What is Open MPI?</h3>
+
+<p>Open MPI is able to combine the expertise, technologies, and resources from all across the High Performance Computing community in order to build the best MPI library available. Open MPI offers advantages for system and software vendors, application developers and computer science researchers.</p>
+
+<h3 id="password-less-authentication">Password less authentication.**</h3>
+
+<p>Log in to the node and generate SSH keys:</p>
+
+<p><code class="highlighter-rouge">ssh-keygen</code></p>
+
+<p>The output should be:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Generating public/private rsa key pair.
+Enter file in which to save the key (/root/.ssh/id_rsa):
+Created directory '/root/.ssh'.
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /root/.ssh/id_rsa.
+Your public key has been saved in /root/.ssh/id_rsa.pub.
+The key fingerprint is:
+c6:66:93:16:73:0b:bf:46:46:28:7d:a5:38:a3:4d:6d root@node01
+The key's randomart image is:
++--[ RSA 2048]----+
+|            .    |
+|       . + o     |
+|      . @ E      |
+|       * &amp; .     |
+|      . S =      |
+|       = + .     |
+|          o      |
+|         .       |
+|                 |
++-----------------+
+</code></pre>
+</div>
+
+<p>The above command will generate the following files.</p>
+
+<p><code class="highlighter-rouge">cd ~/.ssh</code>
+<code class="highlighter-rouge">ls -la</code></p>
+
+<p>Change the permissions accordingly to the client machines.</p>
+
+<p><code class="highlighter-rouge">cat ~/.ssh/id_dsa.pub &gt;&gt; ~/.ssh/authorized_keys</code></p>
+
+<h2 id="open-mpi-installation">OPEN MPI installation</h2>
+
+<p><code class="highlighter-rouge">yum install openmpi-devel.x86_64</code></p>
+
+<p><code class="highlighter-rouge">sudo yum provides */mpicc</code></p>
+
+<h3 id="setting-the-environment-variables">Setting the environment variables.</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>yum install environment-modules
+module load mpi/openmpi-x86_64
+module add mpi/openmpi-x86_64
+<span class="nb">cd</span> ~/
+<span class="nb">echo</span> &lt;server IP&gt; &gt; mpi_hosts
+</code></pre>
+</div>
+
+<h4 id="verification">Verification</h4>
+
+<p>Displays the server id:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>cat mpi_hosts
+mkdir /root/samples
+<span class="nb">cd</span> /root/samples
+yum install wget
+wget http://svn.open-mpi.org/svn/ompi/tags/v1.6-series/v1.6.4/examples/hello_c.c
+mpicc hello_c.c -o hello
+mpirun ./hello
+</code></pre>
+</div>
+
+<p>The output will be:</p>
+
+<blockquote>
+  <p>Hello, world, I am 0 of 1</p>
+</blockquote>
+
+<p>To run on multiple machines (considering 2 machines):</p>
+
+<p><code class="highlighter-rouge">mpirun -v -np 2 --hostfile ~/mpi_hosts /root/samples/hello</code></p>
+
+<p>The output will be:</p>
+
+<blockquote>
+  <p>Hello, world, I am 0 of 1<br />
+Hello, world, I am 1 of 1</p>
+</blockquote>
+
+<h2 id="hpcc---high-performance-computing-cluster">HPCC - High Performance Computing Cluster:</h2>
+
+<p>HPC Challenge is a benchmark suite that measures a range memory access patterns. Development of the benchmark takes place on the <a href="http://sourceforge.net/projects/hpcc/#_blank">HPCC SourceForge page</a>.
+The HPC Challenge benchmark consists of basically 7 tests and the commonly used are Ptrans and HPL.</p>
+
+<h3 id="installation">Installation</h3>
+
+<p>This will install all the BLAS and CBLAS which are prerequisites for HPCC and it also downloads HPCC files.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo yum update
+<span class="nb">echo</span> <span class="s2">"--- Installing gfortran Compiler ---"</span>
+sudo yum: install gfortran
+<span class="nb">echo</span> <span class="s2">"--- Downloading BLAS ---"</span>
+wget http://www.netlib.org/blas/blas.tgz
+<span class="nb">echo</span> <span class="s2">"--- Extracting BLAS ---"</span>
+tar -xvzf blas.tgz
+<span class="nb">cd </span>BLAS
+<span class="nb">echo</span> <span class="s2">"--- BLAS Compilation Started ---"</span>
+<span class="nb">echo</span> <span class="s2">" "</span>
+make all
+<span class="nb">echo</span> <span class="s2">" "</span>
+<span class="nb">echo</span> <span class="s2">"--- BLAS Compilation Finished ---"</span>
+<span class="nb">cd
+echo</span> <span class="s2">"--- Downloading CBLAS ---"</span>
+wget http://www.netlib.org/blas/blast-forum/cblas.tgz
+<span class="nb">echo</span> <span class="s2">"--- Extracting CBLAS ---"</span>
+tar -xvzf cblas.tgz
+<span class="nb">cd </span>CBLAS
+<span class="nb">echo</span> <span class="s2">"#Updating Makefile.in with the appropriate values"</span>
+sed -i <span class="s2">"/BLLIB =/ s:/.*:</span><span class="nv">$HOME</span><span class="s2">/BLAS/blas_LINUX.a:"</span> Makefile.in
+<span class="nb">echo</span> <span class="s2">"--- Bulding CBLAS ---"</span>
+make all
+<span class="nb">cd
+echo</span> <span class="s2">"--- Downloading HPCC --- "</span>
+wget http://icl.cs.utk.edu/projectsfiles/hpcc/download/hpcc-1.4.3.tar.gz
+<span class="nb">echo</span> <span class="s2">"--- Extracting HPCC ---"</span>
+tar -zxvf hpcc-1.4.3.tar.gz
+</code></pre>
+</div>
+
+<h4 id="hpcc">HPCC</h4>
+
+<p>This will install all the benchmarks of LINPACK. LINPACK includes HPL, Ptrans, DEGMM, FFT, and stream. Running this file will create an HPCC out file and input text file showing the results.</p>
+
+<p><code class="highlighter-rouge">make arch = xxxxxx(file name of make file)</code></p>
+
+<p>Makefile:</p>
+
+<pre><code class="language-Makefile">#
+# -- High Performance Computing Linpack Benchmark (HPL)
+# HPL - 2.0 - September 10, 2008
+# Antoine P. Petitet
+# University of Tennessee, Knoxville
+# Innovative Computing Laboratory
+# (C) Copyright 2000-2008 All Rights Reserved
+#
+# -- Copyright notice and Licensing terms:
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+# 1. Redistributions of source code must retain the above copyright
+# notice, this list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright
+# notice, this list of conditions, and the following disclaimer in the
+# documentation and/or other materials provided with the distribution.
+#
+# 3. All advertising materials mentioning features or use of this
+# software must display the following acknowledgement:
+# This product includes software developed at the University of
+# Tennessee, Knoxville, Innovative Computing Laboratory.
+#
+# 4. The name of the University, the name of the Laboratory, or the
+# names of its contributors may not be used to endorse or promote
+# products derived from this software without specific written
+# permission.
+#
+# -- Disclaimer:
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# \`\`AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE UNIVERSITY
+# OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# ######################################################################
+#
+# ----------------------------------------------------------------------
+# - shell --------------------------------------------------------------
+# ----------------------------------------------------------------------
+#
+SHELL = /bin/sh
+#
+CD = cd
+CP = cp
+LN\_S = ln -s
+MKDIR = mkdir
+RM = /bin/rm -f
+TOUCH = touch
+#
+# ----------------------------------------------------------------------
+# - Platform identifier ------------------------------------------------
+# ----------------------------------------------------------------------
+#
+ARCH = $(arch)
+#
+# ----------------------------------------------------------------------
+# - HPL Directory Structure / HPL library ------------------------------
+# ----------------------------------------------------------------------
+#
+TOPdir = ../../..
+INCdir = $(TOPdir)/include
+BINdir = $(TOPdir)/bin/$(ARCH)
+LIBdir = $(TOPdir)/lib/$(ARCH)
+#
+HPLlib = $(LIBdir)/libhpl.a
+#
+# ----------------------------------------------------------------------
+# - Message Passing library (MPI) --------------------------------------
+# ----------------------------------------------------------------------
+# MPinc tells the C compiler where to find the Message Passing library
+# header files, MPlib is defined to be the name of the library to be
+# used. The variable MPdir is only used for defining MPinc and MPlib.
+#
+MPdir = /usr/lib64/openmpi
+MPinc = -I$(MPdir)/include
+MPlib = $(MPdir)/lib/libmpi.so
+#
+# ----------------------------------------------------------------------
+# - Linear Algebra library (BLAS or VSIPL) -----------------------------
+# ----------------------------------------------------------------------
+# LAinc tells the C compiler where to find the Linear Algebra library
+# header files, LAlib is defined to be the name of the library to be
+# used. The variable LAdir is only used for defining LAinc and LAlib.
+#
+LAdir = $(HOME)
+LAinc =
+LAlib = $(LAdir)/CBLAS/lib/cblas\_LINUX.a $(LAdir)/BLAS/blas\_LINUX.a
+#
+# ----------------------------------------------------------------------
+# - F77 / C interface --------------------------------------------------
+# ----------------------------------------------------------------------
+# You can skip this section if and only if you are not planning to use
+# a BLAS library featuring a Fortran 77 interface. Otherwise, it is
+# necessary to fill out the F2CDEFS variable with the appropriate
+# options. \*\*One and only one\*\* option should be chosen in \*\*each\*\* of
+# the 3 following categories:
+#
+# 1) name space (How C calls a Fortran 77 routine)
+#
+# -DAdd\_ : all lower case and a suffixed underscore (Suns,
+# Intel, ...), \[default\]
+# -DNoChange : all lower case (IBM RS6000),
+# -DUpCase : all upper case (Cray),
+# -DAdd\_\_ : the FORTRAN compiler in use is f2c.
+#
+# 2) C and Fortran 77 integer mapping
+#
+# -DF77\_INTEGER=int : Fortran 77 INTEGER is a C int, \[default\]
+# -DF77\_INTEGER=long : Fortran 77 INTEGER is a C long,
+# -DF77\_INTEGER=short : Fortran 77 INTEGER is a C short.
+#
+# 3) Fortran 77 string handling
+#
+# -DStringSunStyle : The string address is passed at the string loca-
+# tion on the stack, and the string length is then
+# passed as an F77\_INTEGER after all explicit
+# stack arguments, \[default\]
+# -DStringStructPtr : The address of a structure is passed by a
+# Fortran 77 string, and the structure is of the
+# form: struct {char \*cp; F77\_INTEGER len;},
+# -DStringStructVal : A structure is passed by value for each Fortran
+# 77 string, and the structure is of the form:
+# struct {char \*cp; F77\_INTEGER len;},
+# -DStringCrayStyle : Special option for Cray machines, which uses
+# Cray fcd (fortran character descriptor) for
+# interoperation.
+#
+F2CDEFS =
+#
+# ----------------------------------------------------------------------
+# - HPL includes / libraries / specifics -------------------------------
+# ----------------------------------------------------------------------
+#
+HPL\_INCLUDES = -I$(INCdir) -I$(INCdir)/$(ARCH) $(LAinc) $(MPinc)
+HPL\_LIBS = $(HPLlib) $(LAlib) $(MPlib) -lm
+#
+# - Compile time options -----------------------------------------------
+#
+# -DHPL\_COPY\_L force the copy of the panel L before bcast;
+# -DHPL\_CALL\_CBLAS call the cblas interface;
+# -DHPL\_CALL\_VSIPL call the vsip library;
+# -DHPL\_DETAILED\_TIMING enable detailed timers;
+#
+# By default HPL will:
+# \*) not copy L before broadcast,
+# \*) call the BLAS Fortran 77 interface,
+# \*) not display detailed timing information.
+#
+HPL\_OPTS = -DHPL\_CALL\_CBLAS
+#
+# ----------------------------------------------------------------------
+#
+HPL\_DEFS = $(F2CDEFS) $(HPL\_OPTS) $(HPL\_INCLUDES)
+#
+</code></pre>
+
+<h2 id="references">References</h2>
+
+<p><a href="http://docs.openstack.org/user-guide/cli_cheat_sheet.html#block-storage-cinder">http://docs.openstack.org/user-guide/cli_cheat_sheet.html#block-storage-cinder</a>
+<a href="http://docs.openstack.org/cli-reference/content/install_clients.html">http://docs.openstack.org/cli-reference/content/install_clients.html</a></p>
+
+
+    </div>
+
+    </div>
+
+    <!--
+    <div class="row"><div class="col-xs-12 col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6 col-xl-offset-4 col-xl-4">
+
+    <div id="disqus_thread" style="margin-top: 20px; margin-bottom: 20px;"></div>
+    <script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'cloudandbigdatalab';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+</div></div>
+-->
+
+</div>
+
+<footer>
+  <hr>
+  <div class="container-fluid text-center">
+    <p>
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&repo=cloudandbigdatalab.github.io&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&repo=cloudandbigdatalab.github.io&type=watch&count=true&v=2" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&repo=cloudandbigdatalab.github.io&type=fork&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&type=follow&count=true" frameborder="0" scrolling="0" width="200px" height="20px"></iframe>
+    </p>
+    <div class="row" style="display:inline-block;vertical-align:middle;">
+       <div class="col-xs-6 col-lg-2">
+	       <a href="https://www.ci.uchicago.edu"> <img src ="../images/logos/ci.png" alt="Computer Institute." style="width: auto; height: 120px; padding: 20px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2" style="padding:25px;">
+	       <a href="https://www.tacc.utexas.edu"><img src ="../images/logos/tacc.svg" alt="Texas Advanced Computing Center" style="width: auto; height: 70px; padding: 20px;"></a>
+       </div>
+       <div class="col-xs-6 col-lg-2" style="padding:25px;">
+	       <a href="http://www.icair.org"> <img src="../images/logos/icair.png" alt="international Center for Internet Research." style="width: auto; height: 75px; padding: 20px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2" style="padding:40px;">
+	       <a href="https://www.osu.edu">  <img src="../images/logos/osu.jpg" style="height:" alt="Ohio State University" style="width: auto; height: 90px; padding: 25px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2">
+	       <a href="http://www.utsa.edu"> <img src="../images/logos/utsa.png" alt="University of Texas at San Antonio" style="width: auto; height: 120px; padding: 20px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2">
+	       <a href="http://www.nsf.gov"> <img src="../images/logos/nsf.jpg" alt="National Security Foundation" style="width: auto; height: 120px; padding: 20px;"></img></a>
+       </div>
+    <hr>
+    &nbsp;
+    <p style="padding-top:1em;font-size=1.25em; text-align:center;">Chameleon Cloud is funded by a grant from the National Science Foundation.</p>
+
+  </div>
+</footer>
+
+
+</body>
+
+</html>

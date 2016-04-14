@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <meta charset="utf-8">
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UTSA OCI Training - Dockers and Micro services - Machine, Compose, and Swarm</title>
+<meta name="description" content="Tutorials, blog posts, and research papers on cloud computing. Topics include security, networking, Docker, OpenStack, and Hadoop. Specific examples for NSF-funded Chameleon Cloud.">
+<meta name="keywords" content="Cloud and Big Data, cloud and big data lab, utsa open cloud institute, open cloud institute, UTSA OCI, Software Defined Storage, SAS, Network Function Virtualization, NFV, Big Data & Machine Learning, Cloud Computing, Cloud Storage,Containerization">
+<meta name="geo.position" content="29.424122;-98.493629">
+<meta name="geo.country" content="US">
+<meta name="geo.region" content="US-TX">
+<meta name="msvalidate.01" content="A48032010EFA0B727FEBFDA61E33014C" />
+<link rel="stylesheet" href="/stylesheets/main.css">
+<link rel="stylesheet" href="/stylesheets/custom.css">
+<script src="/javascripts/jquery-1.11.3.min.js"></script>
+<script src="/javascripts/bootstrap.min.js"></script>
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-68778127-1', 'auto');ga('send', 'pageview');
+</script>
+<link rel="canonical" href="https://cloudandbigdatalab.github.com/chameleon/docker/machine-compose-swarm/"/>
+
+
+</head>
+
+<body>
+
+  <header>
+</header>
+
+
+  <div class="container-fluid">
+
+    <div class="row">
+
+      <div class="
+      col-xs-12
+      col-sm-offset-1 col-sm-10
+      col-md-offset-2 col-md-8
+      col-lg-offset-3 col-lg-6
+      " style="margin-top: 20px; margin-bottom: 20px;">
+
+      <div class="visible-print-block">
+        <img src="/images/nsf.png" style="width: 100px; height: 100px;"></img>
+        <h1>Chameleon Cloud Tutorial</h1>
+        <p>National Science Foundation</p>
+        <p>Program Solicitation # NSF 13-602</p>
+        <p>CISE Research Infrastructure: Mid-Scale Infrastructure - NSFCloud (CRI: NSFCloud)</p>
+
+      </div>
+
+      <div class="hidden-print">
+      <ol class="breadcrumb">
+        <li><a href="/chameleon">Chameleon</a></li>
+        <li>Dockers and Micro services</li>
+        <li class="active">Machine, Compose, and Swarm</li>
+      </ol>
+
+      
+      
+      
+      
+
+      <a class="btn btn-default " role="button" target="_blank" href="https://github.com/cloudandbigdatalab/tutorial-cham-docker-2"><span class="glyphicon glyphicon-link" aria-hidden="true"></span> Lab</a>
+
+      <a class="btn btn-default disabled" role="button" target="_blank" href=""><span class="glyphicon glyphicon-film" aria-hidden="true"></span> Video</a>
+
+      <a class="btn btn-default" role="button" target="_blank" href="/pdf/chameleon-docker-machine-compose-swarm.pdf" download><span class="glyphicon glyphicon-file" aria-hidden="true"></span> PDF</a>
+    </div>
+
+      <h1>Dockers and Micro services - Machine, Compose, and Swarm</h1>
+
+      
+<p><strong>Because of incompatibilities, part of this tutorial uses Rackspace instead of Chameleon. See the <a href="#machine">Machine</a> section for details.</strong></p>
+
+<p>This tutorial will cover using Docker Machine, Compose and Swarm. Ultimately these tools are intended to be used together but because they’re not yet mature that synthesis is limited. We’ll discuss the limitations in more detail throughout the tutorial. We’ll instead focus on using each tool individually and demonstrate them together in ways that currently work.</p>
+
+<h3 id="compose">Compose</h3>
+<p>Compose simplifies the process of arranging and linking containers together. Compose lets us specify the links and runtime configurations of containers in a single config file, rather than having several lengthy commands to execute in the right sequence. In the first tutorial we setup containers on 2 different hosts and linked them together to run a simple webpage. In this tutorial we will set up a similar page that lets you post messages and lists those previously posted. It uses 3 containers and we’ll arrange them with Compose.</p>
+
+<h3 id="machine">Machine</h3>
+<p>Machine allows us to create Docker hosts and control them without interacting with the host machines directly. This way you don’t have to SSH to machines running the Docker daemon to run containers. Chameleon won’t work for this part of the tutorial because of problems with Chameleon’s lease system. Support for Chameleon will likely happen in the future. See this <a href="https://github.com/docker/machine/issues/1461">issue</a> on their GitHub. You could also use virtual machines running on a Chameleon instance but we ran into issues installing VirtualBox on the default Chameleon CentOS image. So for now we’re going to demo Machine with Rackspace to give you an idea of its potential. <strong>We will be controlling everything from a Chameleon machine however.</strong></p>
+
+<h3 id="swarm">Swarm</h3>
+<p>Swarm is used to group multiple Docker hosts together so that containers or groups of containers can scale across machines. We’ll also be demoing this on Rackspace because we use Machine to setup our Swarm.</p>
+
+<h2 id="prerequisites">Prerequisites</h2>
+
+<p>It’s expected that you have gone through <a href="http://cloudandbigdatalab.github.io/docs/Chameleon%20Cloud%20Tutorial%20-%20Docker%20Fundamentals.pdf">Docker Tutorial 1</a> or are already familiar with its content. No more prior knowledge is required past the first tutorial.</p>
+
+<h2 id="steps-outline">Steps Outline</h2>
+
+<p>The whole tutorial (barring problems) will probably take 45 mins to an hour. It can take a long time to update your Chameleon instance and creating hosts with Machine can take a few minutes per host. How long your hosts take to create depends on the type and provider.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Task</th>
+      <th>Approximate Time (mins)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Setup</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Compose</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Machine</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Swarm</td>
+      <td>20</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="setup">Setup</h2>
+
+<p>We’ll be using the default Chameleon CentOS image for this tutorial.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo yum update -y
+
+sudo yum install -y docker
+
+sudo groupadd docker
+
+sudo usermod -a -G docker cc
+
+sudo systemctl start docker.service
+</code></pre>
+</div>
+
+<p>We also created a user group <code class="highlighter-rouge">docker</code> and added the default <code class="highlighter-rouge">cc</code> user to it before starting the Docker daemon. <strong>After logging out and back in you will no longer have to use sudo with the Docker client or tools.</strong></p>
+
+<p>Then follow these instructions to install <a href="https://docs.docker.com/machine/#installation">Machine</a> and <a href="https://docs.docker.com/compose/install/">Compose</a>. <strong>If you’re getting “Permission Denied” using curl, run <code class="highlighter-rouge">sudo -i</code> to become root, run the commands, then <code class="highlighter-rouge">exit</code>.</strong></p>
+
+<p>If you’re going to try to use Machine with Rackspace, VM’s, or another provider follow they’re docs to get setup.  It’s fairly easy to complete the demo with VM’s on your own physical machine.</p>
+
+<h2 id="compose-1">Compose</h2>
+
+<p>With Compose you outline your container configuration and arrangement with a YAML file name docker-compose.yml. Our <a href="https://github.com/cloudandbigdatalab/tutorial-cham-docker-2/blob/master/docker-compose.yml">docker-compose.yml</a> is on our GitHub. This lays out the 3 container composition. In our docker-compose.yml we specify to pull out images from Docker Hub. All the resources, including the Dockerfile, to build these images is available on our <a href="https://github.com/cloudandbigdatalab/tutorial-cham-docker-2">GitHub</a>. If you wanted to build the images yourself or make modifications, download the repo then change</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="s">image</span><span class="pi">:</span> <span class="s">cloudandbigdatalab/server:tutorial-2</span>
+</code></pre>
+</div>
+
+<p>to</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="s">build</span><span class="pi">:</span> <span class="s">./server</span>
+</code></pre>
+</div>
+
+<p>to build and use a local image. We’re assuming the Dockerfile for server is in the server folder within the current directory. You would do the same for the page container. Note for the db container we’re using the unmodified Postgres image off Docker Hub so their isn’t a folder for it. Here’s a quick explanation of what’s going on with our composition.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Container Name</th>
+      <th>Apps</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>server</td>
+      <td>Nginx</td>
+      <td>handles http requests</td>
+    </tr>
+    <tr>
+      <td>page</td>
+      <td>uWSGI and Django</td>
+      <td>uWSGI connects Nginx to Django, Django generates the html</td>
+    </tr>
+    <tr>
+      <td>db</td>
+      <td>Postgres</td>
+      <td>database for page, Django connects to Postgres</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="run-the-composition">Run the Composition</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker-compose -p tutorial up -d
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">-p tutorial</code> specifies our project name. Otherwise it uses the name of the current directory. If the images had been changed and we wanted to run the updated versions we would run</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker-compose pull
+docker-compose -p tutorial up -d
+</code></pre>
+</div>
+
+<p>and the images would be pulled and our containers restarted.</p>
+
+<p>Check your running containers.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker-compose -p tutorial ps
+</code></pre>
+</div>
+
+<p>The output should look similar to this.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Name                     Command               State              Ports
+----------------------------------------------------------------------------------------
+tutorial_db_1       /docker-entrypoint.sh postgres   Up      5432/tcp
+tutorial_page_1     ./startup.sh                     Up      3031/tcp
+tutorial_server_1   nginx -g daemon off;             Up      443/tcp, 0.0.0.0:80-&gt;80/tcp
+</code></pre>
+</div>
+
+<p>Now if you visit the ip of your Chameleon machine in the browser you should see the page running.</p>
+
+<h2 id="machine-1">Machine</h2>
+
+<p>So now we’re going to do the same thing but we’re going to run our composition on a Docker host we setup with Machine. As we outlined in the introduciton we can’t use Machine to create hosts on Chameleon (or VM’s) so we’re using Rackspace.</p>
+
+<h3 id="create-a-host">Create a host</h3>
+
+<p>We have our account information in environment variables in this example. <code class="highlighter-rouge">-d rackspace</code> specifies the <em>driver</em> as Rackspace. This will take several minutes.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker-machine create -d rackspace docker-main
+</code></pre>
+</div>
+
+<h3 id="point-docker-at-remote-machine">Point Docker at Remote Machine</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nb">eval</span> <span class="s2">"</span><span class="k">$(</span>docker-machine env docker-main<span class="k">)</span><span class="s2">"</span>
+</code></pre>
+</div>
+<p>Now if we run <code class="highlighter-rouge">docker ps</code> the 3 containers our gone because we’re looking at the remote host.</p>
+
+<h3 id="run-composition-on-remote-host">Run Composition on Remote Host</h3>
+
+<p>The commands are exactly the same as before.</p>
+
+<p>Run composition.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker-compose -p tutorial up -d
+</code></pre>
+</div>
+
+<p>Check our running containers.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker-compose -p tutorial ps
+</code></pre>
+</div>
+
+<p>To see the ip of our remote machine.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker-machine ip docker-main
+</code></pre>
+</div>
+
+<p>Then if you visit the ip in the browser you should see the same page as before. Note that the top left string on the page is the id of the page container. It will be different from before.</p>
+
+<h2 id="swarm-1">Swarm</h2>
+
+<p>As noted in the introduction we’ll be using Rackspace for this part of the tutorial as well. It is possible to manually setup a Swarm cluster of Chameleon Docker hosts but we won’t be doing that here. We’ll be using Machine which simplifies the process.</p>
+
+<h3 id="our-composition">Our Composition</h3>
+
+<p>For this demo we can’t really use the multi-container setup we used earlier. This is for two reasons:</p>
+
+<ol>
+  <li>
+    <p>Currently linked containers must be run on the same host. This defeats the point of Swarm. Docker’s networking is being overhauled to allow cross-host links and the feature is available in experimental builds. We were unable to get it working at the time of this writing however.</p>
+  </li>
+  <li>
+    <p>Even with cross-host linking, there’s no automatic proxying or load balancing. So if for example we scaled the page container to 10, that’s easy enough. But we’d also have to configure Nginx to load balance between those containers. Or we could have a proxy container in between the two. This is all possible but again we didn’t get it working at the time of this writing. This is something you must build into your app design, there’s no automatic mechanisms for this as of yet.</p>
+  </li>
+</ol>
+
+<p>We’re still using an (extremely sparse) <a href="https://github.com/cloudandbigdatalab/tutorial-cham-docker-2/blob/master/swarm/docker-compose.yml">docker-compose.yml</a> for this. It consists of one service / container that runs <a href="https://folding.stanford.edu">folding@home</a>. We’re going to run it and scale it across a few nodes.</p>
+
+<h3 id="generate-swarm-token">Generate Swarm Token</h3>
+
+<p>We’re generating the token and saving to an environment variable.</p>
+
+<p>export SWARM_TOKEN=$(docker run swarm create)</p>
+
+<h3 id="swarm-master">Swarm Master</h3>
+
+<p>Again the account information needed for Rackspace is stored in environment variables. Creating the machine will a few minutes.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker-machine create -d rackspace --swarm --swarm-master <span class="se">\</span>
+  --swarm-discovery<span class="o">=</span>token://<span class="nv">$SWARM_TOKEN</span> docker-swarm-master
+</code></pre>
+</div>
+
+<h3 id="swarm-nodes">Swarm Nodes</h3>
+
+<p>Here we’re using a bash loop to create 2 nodes.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="k">for</span> <span class="o">((</span>i <span class="o">=</span> 0; i &lt; 2; i++<span class="o">))</span>; <span class="k">do</span> <span class="se">\</span>
+  docker-machine create -d rackspace --swarm <span class="se">\</span>
+    --swarm-discovery<span class="o">=</span>token://<span class="nv">$SWARM_TOKEN</span> docker-swarm-node-<span class="nv">$i</span>; <span class="se">\</span>
+<span class="k">done</span>
+</code></pre>
+</div>
+
+<h3 id="point-docker-at-swarm">Point Docker at Swarm</h3>
+
+<p>Now we’re going to point the Docker client at our Swarm cluster.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="nb">eval</span> <span class="s2">"</span><span class="k">$(</span>docker-machine env --swarm docker-swarm-master<span class="k">)</span><span class="s2">"</span>
+</code></pre>
+</div>
+
+<p>We can see info about the swarm with</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker info
+</code></pre>
+</div>
+
+<p>which should output something like this.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Containers: 4
+Images: 3
+Storage Driver:
+Role: primary
+Strategy: spread
+Filters: affinity, health, constraint, port, dependency
+Nodes: 3
+ swarm-master: 104.130.134.163:2376
+  └ Containers: 2
+  └ Reserved CPUs: 0 / 1
+  └ Reserved Memory: 0 B / 1.014 GiB
+  └ Labels: <span class="nv">executiondriver</span><span class="o">=</span>native-0.2, <span class="nv">kernelversion</span><span class="o">=</span>3.13.0-37-generic, <span class="nv">operatingsystem</span><span class="o">=</span>Ubuntu 14.04.1 LTS, <span class="nv">provider</span><span class="o">=</span>rackspace, <span class="nv">storagedriver</span><span class="o">=</span>aufs
+ swarm-node-0: 104.130.134.175:2376
+  └ Containers: 1
+  └ Reserved CPUs: 0 / 1
+  └ Reserved Memory: 0 B / 1.014 GiB
+  └ Labels: <span class="nv">executiondriver</span><span class="o">=</span>native-0.2, <span class="nv">kernelversion</span><span class="o">=</span>3.13.0-37-generic, <span class="nv">operatingsystem</span><span class="o">=</span>Ubuntu 14.04.1 LTS, <span class="nv">provider</span><span class="o">=</span>rackspace, <span class="nv">storagedriver</span><span class="o">=</span>aufs
+ swarm-node-1: 104.130.134.76:2376
+  └ Containers: 1
+  └ Reserved CPUs: 0 / 1
+  └ Reserved Memory: 0 B / 1.014 GiB
+  └ Labels: <span class="nv">executiondriver</span><span class="o">=</span>native-0.2, <span class="nv">kernelversion</span><span class="o">=</span>3.13.0-37-generic, <span class="nv">operatingsystem</span><span class="o">=</span>Ubuntu 14.04.1 LTS, <span class="nv">provider</span><span class="o">=</span>rackspace, <span class="nv">storagedriver</span><span class="o">=</span>aufs
+Execution Driver:
+Kernel Version:
+Operating System:
+CPUs: 3
+Total Memory: 3.041 GiB
+Name:
+ID:
+Http Proxy:
+Https Proxy:
+No Proxy:
+</code></pre>
+</div>
+
+<h3 id="run-composition">Run Composition</h3>
+
+<p>Note that you need to download the docker-compose.yml into a different directory from earlier and run Compose from there.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker-compose -p tutorial up -d
+</code></pre>
+</div>
+
+<p>If we run</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker-compose -p tutorial ps
+</code></pre>
+</div>
+
+<p>and look at the output we see a single worker container running.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Name                     Command               State   Ports
+------------------------------------------------------------------
+tutorial_worker_1   /bin/sh -c /etc/init.d/FAH ...   Up
+</code></pre>
+</div>
+
+<p>We can scale our <em>worker</em> service to 6.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker-compose -p tutorial scale <span class="nv">worker</span><span class="o">=</span>6
+</code></pre>
+</div>
+
+<p>Now if we run <code class="highlighter-rouge">docker-compose -p tutorial ps</code> again and look at the output we should see multiple worker containers running.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Name                     Command               State   Ports
+------------------------------------------------------------------
+tutorial_worker_1   /bin/sh -c /etc/init.d/FAH ...   Up
+tutorial_worker_2   /bin/sh -c /etc/init.d/FAH ...   Up
+tutorial_worker_3   /bin/sh -c /etc/init.d/FAH ...   Up
+tutorial_worker_4   /bin/sh -c /etc/init.d/FAH ...   Up
+tutorial_worker_5   /bin/sh -c /etc/init.d/FAH ...   Up
+tutorial_worker_6   /bin/sh -c /etc/init.d/FAH ...   Up
+</code></pre>
+</div>
+
+<p>If we run <code class="highlighter-rouge">docker ps</code> we can look at the <code class="highlighter-rouge">NAMES</code> field and see that our containers our spread across the 3 hosts in our cluster.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>CONTAINER ID        IMAGE                        COMMAND                CREATED              STATUS              PORTS               NAMES
+faadba6dff79        jordan0day/folding-at-home   <span class="s2">"/bin/sh -c '/etc/in   About a minute ago   Up About a minute                       swarm-master/tutorial_worker_6
+3457647206b0        jordan0day/folding-at-home   "</span>/bin/sh -c <span class="s1">'/etc/in   About a minute ago   Up About a minute                       swarm-node-1/tutorial_worker_5
+97daf03f52c2        jordan0day/folding-at-home   "/bin/sh -c '</span>/etc/in   About a minute ago   Up About a minute                       swarm-node-0/tutorial_worker_4
+fd381b18544e        jordan0day/folding-at-home   <span class="s2">"/bin/sh -c '/etc/in   About a minute ago   Up About a minute                       swarm-master/tutorial_worker_3
+c2edd0380540        jordan0day/folding-at-home   "</span>/bin/sh -c <span class="s1">'/etc/in   About a minute ago   Up About a minute                       swarm-node-1/tutorial_worker_2
+8ddadc49ec72        jordan0day/folding-at-home   "/bin/sh -c '</span>/etc/in   2 minutes ago        Up 2 minutes                            swarm-node-0/tutorial_worker_1
+</code></pre>
+</div>
+
+<h3 id="cross-provider-swarm">Cross-Provider Swarm</h3>
+
+<p>You can also setup a Swarm cluster across different providers. For example we could have launched one of our containers on Digital Ocean with:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>docker-machine create -d digitalocean --swarm <span class="se">\</span>
+  --swarm-discovery<span class="o">=</span>token://<span class="nv">$SWARM_TOKEN</span> docker-swarm-node-&lt;i&gt;;
+</code></pre>
+</div>
+
+<p>and have a mixed cluster. In testing this worked just as well as if when they were on the same provider.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Docker intends for Compose, Machine, and Swarm to work together to enable simple yet powerful workflows. The experience of putting this tutorial together shows that’s not reality today. However, Compose and Machine work pretty well on their own barring Machine’s Chameleon incompatibility. The synthesis between Compose and Machine is also solid right now. Swarm is problematic and not as useful as one might initially think. But Docker does disclaim that these tools are not production ready yet. In the future they should work better for multi-container apps and services.</p>
+
+
+    </div>
+
+    </div>
+
+    <!--
+    <div class="row"><div class="col-xs-12 col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6 col-xl-offset-4 col-xl-4">
+
+    <div id="disqus_thread" style="margin-top: 20px; margin-bottom: 20px;"></div>
+    <script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'cloudandbigdatalab';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+</div></div>
+-->
+
+</div>
+
+<footer>
+  <hr>
+  <div class="container-fluid text-center">
+    <p>
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&repo=cloudandbigdatalab.github.io&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&repo=cloudandbigdatalab.github.io&type=watch&count=true&v=2" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&repo=cloudandbigdatalab.github.io&type=fork&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&type=follow&count=true" frameborder="0" scrolling="0" width="200px" height="20px"></iframe>
+    </p>
+    <div class="row" style="display:inline-block;vertical-align:middle;">
+       <div class="col-xs-6 col-lg-2">
+	       <a href="https://www.ci.uchicago.edu"> <img src ="../images/logos/ci.png" alt="Computer Institute." style="width: auto; height: 120px; padding: 20px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2" style="padding:25px;">
+	       <a href="https://www.tacc.utexas.edu"><img src ="../images/logos/tacc.svg" alt="Texas Advanced Computing Center" style="width: auto; height: 70px; padding: 20px;"></a>
+       </div>
+       <div class="col-xs-6 col-lg-2" style="padding:25px;">
+	       <a href="http://www.icair.org"> <img src="../images/logos/icair.png" alt="international Center for Internet Research." style="width: auto; height: 75px; padding: 20px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2" style="padding:40px;">
+	       <a href="https://www.osu.edu">  <img src="../images/logos/osu.jpg" style="height:" alt="Ohio State University" style="width: auto; height: 90px; padding: 25px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2">
+	       <a href="http://www.utsa.edu"> <img src="../images/logos/utsa.png" alt="University of Texas at San Antonio" style="width: auto; height: 120px; padding: 20px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2">
+	       <a href="http://www.nsf.gov"> <img src="../images/logos/nsf.jpg" alt="National Security Foundation" style="width: auto; height: 120px; padding: 20px;"></img></a>
+       </div>
+    <hr>
+    &nbsp;
+    <p style="padding-top:1em;font-size=1.25em; text-align:center;">Chameleon Cloud is funded by a grant from the National Science Foundation.</p>
+
+  </div>
+</footer>
+
+
+</body>
+
+</html>

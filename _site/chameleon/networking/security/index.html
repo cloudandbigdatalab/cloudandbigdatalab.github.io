@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <meta charset="utf-8">
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UTSA OCI Training - Network Functions Virtualization/ Software Defined Storage - Security</title>
+<meta name="description" content="Tutorials, blog posts, and research papers on cloud computing. Topics include security, networking, Docker, OpenStack, and Hadoop. Specific examples for NSF-funded Chameleon Cloud.">
+<meta name="keywords" content="Cloud and Big Data, cloud and big data lab, utsa open cloud institute, open cloud institute, UTSA OCI, Software Defined Storage, SAS, Network Function Virtualization, NFV, Big Data & Machine Learning, Cloud Computing, Cloud Storage,Containerization">
+<meta name="geo.position" content="29.424122;-98.493629">
+<meta name="geo.country" content="US">
+<meta name="geo.region" content="US-TX">
+<meta name="msvalidate.01" content="A48032010EFA0B727FEBFDA61E33014C" />
+<link rel="stylesheet" href="/stylesheets/main.css">
+<link rel="stylesheet" href="/stylesheets/custom.css">
+<script src="/javascripts/jquery-1.11.3.min.js"></script>
+<script src="/javascripts/bootstrap.min.js"></script>
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-68778127-1', 'auto');ga('send', 'pageview');
+</script>
+<link rel="canonical" href="https://cloudandbigdatalab.github.com/chameleon/networking/security/"/>
+
+
+</head>
+
+<body>
+
+  <header>
+</header>
+
+
+  <div class="container-fluid">
+
+    <div class="row">
+
+      <div class="
+      col-xs-12
+      col-sm-offset-1 col-sm-10
+      col-md-offset-2 col-md-8
+      col-lg-offset-3 col-lg-6
+      " style="margin-top: 20px; margin-bottom: 20px;">
+
+      <div class="visible-print-block">
+        <img src="/images/nsf.png" style="width: 100px; height: 100px;"></img>
+        <h1>Chameleon Cloud Tutorial</h1>
+        <p>National Science Foundation</p>
+        <p>Program Solicitation # NSF 13-602</p>
+        <p>CISE Research Infrastructure: Mid-Scale Infrastructure - NSFCloud (CRI: NSFCloud)</p>
+
+      </div>
+
+      <div class="hidden-print">
+      <ol class="breadcrumb">
+        <li><a href="/chameleon">Chameleon</a></li>
+        <li>Network Functions Virtualization/ Software Defined Storage</li>
+        <li class="active">Security</li>
+      </ol>
+
+      
+      
+      
+      
+
+      <a class="btn btn-default disabled" role="button" target="_blank" href=""><span class="glyphicon glyphicon-link" aria-hidden="true"></span> Lab</a>
+
+      <a class="btn btn-default disabled" role="button" target="_blank" href=""><span class="glyphicon glyphicon-film" aria-hidden="true"></span> Video</a>
+
+      <a class="btn btn-default" role="button" target="_blank" href="/pdf/chameleon-networking-security.pdf" download><span class="glyphicon glyphicon-file" aria-hidden="true"></span> PDF</a>
+    </div>
+
+      <h1>Network Functions Virtualization/ Software Defined Storage - Security</h1>
+
+      
+<h2 id="objectives">Objectives</h2>
+
+<p>In this tutorial, you will learn the basic concepts about Chameleon Identity Service, and how to access the Chameleon resource securely. This tutorial will give you understandings on what are the “Chameleon” security features and show you how these features work.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Action</th>
+      <th>Detail</th>
+      <th>Time (min)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Introduce the basic Identity Service concepts</td>
+      <td>Introduce the basic concepts about Chameleon Identity Service, and illustrate how the Chameleon Identity service cooperates with other components by using a simple example. Introduce the 2 ways (Dashboard Access&amp; API Access) Chameleon provides to perform tasks.</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Secure your instance by using ‘Security Group’</td>
+      <td>We will how to create the firewall rules through the Chameleon security Group and how to implement it to your instance.</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Access the instance securely by SSH</td>
+      <td>We will introduce the Public-key cryptography concepts and show how to implement it by using your own key or creating keys in Chameleon</td>
+      <td>15</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Floating IPs</td>
+      <td>Lastly, you will learn how to allocate and release Floating IPs and associate and dissociate Floating IPs to instance on Chameleon Cloud.</td>
+      <td>10</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="prerequisites">Prerequisites</h2>
+
+<p>The following prerequisites are expected for successful completion of this tutorial:</p>
+
+<ul>
+  <li>
+    <p>An SSH client (Windows users can download <a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html">PuTTY</a>)</p>
+  </li>
+  <li>
+    <p>A basic knowledge of Linux</p>
+  </li>
+  <li>
+    <p>A basic knowledge of Firewall and IPs-filter</p>
+  </li>
+  <li>
+    <p>A basic knowledge of cryptography</p>
+  </li>
+</ul>
+
+<h2 id="step-1-introduce-the-basic-identity-service-concepts">Step 1: Introduce the basic Identity Service concepts</h2>
+
+<h3 id="the-basic-identity-service-concepts">1: The basic Identity Service concepts</h3>
+
+<p>To understand OpenStack Identity, you must understand the following concepts:</p>
+
+<p><strong>User</strong>
+Digital representation of a person, system, or service who uses OpenStack cloud services. The Identity service validates that the user who claims to be making the call makes incoming requests. Users have a login and may be assigned tokens to access resources. Users can be directly assigned to a particular tenant and behave as if they are contained in that tenant.</p>
+
+<p><strong>Credentials</strong>
+Data that confirms the user’s identity. For example: user name and password, user name and API key, or an authentication token provided by the Identity Service.</p>
+
+<p><strong>Authentication</strong>
+The process of confirming the identity of a user. OpenStack Identity confirms an incoming request by validating a set of credentials supplied by the user.</p>
+
+<p>These credentials are initially a user name and password, or a user name and API key. When user credentials are validated, OpenStack Identity issues an authentication token, which the user provides in subsequent requests.</p>
+
+<p><strong>Token</strong>
+An alphanumeric string of text used to access OpenStack APIs and resources. A token may be revoked at any time and is valid for a finite duration.</p>
+
+<p>While OpenStack Identity supports token-based authentication in this release, the intention is to support additional protocols in the future. Its main purpose is to be an integration service, and not aspire to be a full-fledged identity store and management solution.</p>
+
+<p><strong>Tenant</strong>
+A container used to group or isolate resources. Tenants also group or isolate identity objects. Depending on the service operator, a tenant may map to a customer, account, organization, or project.</p>
+
+<p><strong>Service</strong>
+An OpenStack service, such as Compute (nova), Object Storage (swift), or Image service (glance). It provides one or more endpoints in which users can access resources and perform operations.</p>
+
+<p><strong>Endpoint</strong>
+A network-accessible address where you access a service, usually a URL address. If you are using an extension for templates, an endpoint template can be created, which represents the templates of all the consumable services that are available across the regions.</p>
+
+<p><strong>Role</strong>
+A personality with a defined set of user rights and privileges to per- form a specific set of operations.</p>
+
+<p>In the Identity service, a token that is issued to a user includes the list of roles. Services that are being called by that user determine how they interpret the set of roles a user has and to which operations or resources each role grants access.</p>
+
+<p>The following diagram shows the OpenStack Identity process flow:</p>
+
+<p><img src="/images/chameleon/networking/security/image5.png" alt="" /></p>
+
+<h3 id="access-the-chameleon-through-the-command-line-clients">2: Access the Chameleon through the command-line clients</h3>
+
+<p>As a Chameleon cloud end user, you can provision your own resources within the limits set by administrators. Chameleon provides the following 2 ways to performs tasks on the cloud:</p>
+
+<p><strong>OpenStack dashboard</strong>
+Use this web-based graphical interface, code named <a href="https://git.openstack.org/cgit/openstack/horizon">horizon</a>, to view, create, and manage resources.</p>
+
+<p><strong>OpenStack command-line clients</strong>
+Each OpenStack project has a command-line client that you can use to run simple commands to view, create, and manage resources in a cloud and automate tasks by using scripts.</p>
+
+<p>Here we are going to discuss how to perform tasks through command-line clients. To do this, first</p>
+
+<h4 id="install-the-command-line-clients">1: Install the command-line clients</h4>
+
+<p>Use pip to install the OpenStack clients on a Mac OS X or Linux system. It is easy and ensures that you get the latest version of the client from the Python Package Index. Also, pip lets you update or remove a package.</p>
+
+<p>You must install each client separately.</p>
+
+<p>Run this command to install or update a client package:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="gp">$ </span>pip install --upgrade python-PROJECTclient
+</code></pre>
+</div>
+
+<p>Where PROJECT is the project name.</p>
+
+<p>For example, to install the nova client, run this command:</p>
+
+<p><code class="highlighter-rouge">pip install python-novaclient</code></p>
+
+<p>To update the nova client, run this command:</p>
+
+<p>`pip install –upgrade python-novaclient</p>
+
+<p>To remove the nova client, run this command:</p>
+
+<p><code class="highlighter-rouge">pip uninstall python-novaclient</code></p>
+
+<h4 id="get-credential">2: Get Credential</h4>
+
+<p>You must have the appropriate credentials if you want to use the command-line tools to make queries against your OpenStack cloud. By far, the easiest way to obtain authentication credentials to use with command-line clients is to use the OpenStack dashboard. From the top-right navigation row, select <strong>Project</strong>, then <strong>Access &amp; Security</strong>, then <strong>API Access</strong> to find out the “<strong>Download the OpenStack RC file</strong>” button as the following:</p>
+
+<p><img src="/images/chameleon/networking/security/image6.png" alt="" /></p>
+
+<p>After clicked the “<strong>Download the OpenStack RC file</strong>” button, a RC file would be downloaded to your computer. The downloaded file looks like this:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+
+<span class="c"># To use an Openstack cloud you need to authenticate against keystone, which</span>
+<span class="c"># returns a **Token** and **Service Catalog**.  The catalog contains the</span>
+<span class="c"># endpoint for all services the user/tenant has access to - including nova,</span>
+<span class="c"># glance, keystone, swift.</span>
+<span class="c">#</span>
+<span class="c"># *NOTE*: Using the 2.0 *auth api* does not mean that compute api is 2.0.  We</span>
+<span class="c"># will use the 1.1 *compute api*</span>
+<span class="nb">export </span><span class="nv">OS_AUTH_URL</span><span class="o">=</span>https://ironic.chameleon.tacc.utexas.edu:5000/v2.0
+
+<span class="c"># With the addition of Keystone we have standardized on the term **tenant**</span>
+<span class="c"># as the entity that owns the resources.</span>
+<span class="nb">export </span><span class="nv">OS_TENANT_ID</span><span class="o">=</span>CH-816772
+<span class="nb">export </span><span class="nv">OS_TENANT_NAME</span><span class="o">=</span><span class="s2">"CH-816772"</span>
+
+<span class="c"># In addition to the owning entity (tenant), openstack stores the entity</span>
+<span class="c"># performing the action as the **user**.</span>
+<span class="nb">export </span><span class="nv">OS_USERNAME</span><span class="o">=</span><span class="s2">"paulrad"</span>
+
+<span class="c"># With Keystone you pass the keystone password.</span>
+<span class="nb">echo</span> <span class="s2">"Please enter your OpenStack Password: "</span>
+<span class="nb">read</span> -sr OS_PASSWORD_INPUT
+<span class="nb">export </span><span class="nv">OS_PASSWORD</span><span class="o">=</span><span class="nv">$OS_PASSWORD_INPUT</span>
+
+<span class="c"># If your configuration has multiple regions, we set that information here.</span>
+<span class="c"># OS_REGION_NAME is optional and only valid in certain environments.</span>
+<span class="nb">export </span><span class="nv">OS_REGION_NAME</span><span class="o">=</span><span class="s2">"regionOne"</span>
+<span class="c"># Don't leave a blank variable, unset it if it was empty</span>
+<span class="k">if</span> <span class="o">[</span> -z <span class="s2">"</span><span class="nv">$OS_REGION_NAME</span><span class="s2">"</span> <span class="o">]</span>; <span class="k">then </span><span class="nb">unset </span>OS_REGION_NAME; <span class="k">fi</span>
+</code></pre>
+</div>
+
+<p>You can now initialize our shell environment to communicate with the Chameleon. From a terminal shell on your own machine run <code class="highlighter-rouge">source /CH-816772-openrc.sh</code>.</p>
+
+<p>This command will prompt you for a password. Type your Chameleon password (it won’t be displayed in your terminal) and press Enter. <strong>Note: adapt the path of the RC file depending on where you downloaded it. It should be at the above location on OS X.</strong></p>
+
+<p>Now you can you can run client commands, for example you can use “nova list” to view the instances under the project “CH-816772”:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>nova list
+
++--------------------------------------+--------------------+--------+------------+-------------+----------------------------------------+
+
+| ID | Name | Status | Task State | Power State | Networks |
+
++--------------------------------------+--------------------+--------+------------+-------------+----------------------------------------+
+
+| 85db8788-8009-4773-b566-792eec393756 | ali-ukf902-n01 | ACTIVE | - | Running | <span class="nv">sharednet1</span><span class="o">=</span>10.12.0.34, 129.114.34.116 |
+
+| 69185323-e3bb-4836-bb41-959cd4b577bc | joseph-mpq055-n01 | ACTIVE | - | Running | <span class="nv">sharednet1</span><span class="o">=</span>10.12.0.26, 129.114.34.117 |
+
+| cc490e03-7f60-462f-825a-dd1f6651e293 | karthi-khj059-n01 | ACTIVE | - | Running | <span class="nv">sharednet1</span><span class="o">=</span>10.12.0.30, 129.114.34.118 |
+
+| 2fc2ddf7-5db3-47e6-b2ae-81e5e93b2b8b | ron-xzn964-n01 | ACTIVE | - | Running | <span class="nv">sharednet1</span><span class="o">=</span>10.12.0.252, 129.114.34.122 |
+
+| 4cbb5013-da23-4e8b-afc1-3ce3801065f2 | shawn-hfl398-n01 | ACTIVE | - | Running | <span class="nv">sharednet1</span><span class="o">=</span>10.12.0.50, 129.114.34.119 |
+
+| 7cb2530f-e436-48c2-a9a6-77b6ed8f1c85 | shawn-hfl398-n02 | ACTIVE | - | Running | <span class="nv">sharednet1</span><span class="o">=</span>10.12.0.51, 129.114.34.124 |
+
+| 6a561b54-17de-4df2-838b-021eba69bae3 | shravya-gcg047-n03 | ACTIVE | - | Running | <span class="nv">sharednet1</span><span class="o">=</span>10.12.0.42, 129.114.34.120 |
+
++--------------------------------------+--------------------+--------+------------+-------------+----------------------------------------+
+</code></pre>
+</div>
+
+<h2 id="step-2-secure-your-instance-by-using-security-group">Step 2: Secure your instance by using ‘Security Group’</h2>
+
+<h3 id="setup-ip-filter-rules-by-using-the-security-group">1: Setup IP filter rules by using the ‘Security Group’</h3>
+
+<p>To begin, login to <a href="https://ironic.chameleon.tacc.utexas.edu/dashboard/auth/login/">Chameleon Resource Provisioning Dashboard</a>.</p>
+
+<p><img src="/images/chameleon/networking/security/image7.png" alt="" /></p>
+
+<p>To access the Security Groups, click on “Projects”, “Compute”, then “Access &amp; Security”.</p>
+
+<p><img src="/images/chameleon/networking/security/image8.png" alt="" /></p>
+
+<p>To setup new IP filter rules, you may click on the “Create Security Group” Button. It should bring up the window displayed below:</p>
+
+<p><img src="/images/chameleon/networking/security/image9.png" alt="" /></p>
+
+<ol>
+  <li>
+    <p>Pick a name for the Security Group. This name needs to be unique across the security groups. This example uses the name tutorial_Security_Lab.</p>
+  </li>
+  <li>
+    <p>Write the description about the security group.</p>
+  </li>
+  <li>
+    <p>After completing, click on the “Create Security Group” button. It should bring up the window displayed below:</p>
+  </li>
+</ol>
+
+<p><img src="/images/chameleon/networking/security/image10.png" alt="" /></p>
+
+<p>Once created the security group. It will be displayed. Click on the “Manage Rules” button. It should bring up the window displayed below:</p>
+
+<p><img src="/images/chameleon/networking/security/image11.png" alt="" /></p>
+
+<p>You can add and delete rules in this page. Rules define which traffic is allowed to instances assigned to the security group. A security group rule consists of three main parts:</p>
+
+<p><strong>Rule</strong>: You can specify the desired rule template or use custom rules, the options are Custom TCP Rule, Custom UDP Rule, or Custom ICMP Rule.</p>
+
+<p><strong>Open Port/Port Range</strong>: For TCP and UDP rules you may choose to open either a single port or a range of ports. Selecting the “Port Range” option will provide you with space to provide both the starting and ending ports for the range. For ICMP rules you instead specify an ICMP type and code in the spaces provided.</p>
+
+<p><strong>Remote</strong>: You must specify the source of the traffic to be allowed via this rule. You may do so either in the form of an IP address block (CIDR) or via a source group (Security Group). Selecting a security group as the source will allow any other instance in that security group access to any other instance via this rule.</p>
+
+<p>When you click on the “Manage Rules” button. It should bring up the window displayed below:</p>
+
+<p><img src="/images/chameleon/networking/security/image12.png" alt="" /></p>
+
+<ol>
+  <li>
+    <p><strong>Rules</strong> Pick a type for this rule, a template rule or a custom rule.</p>
+  </li>
+  <li>
+    <p><strong>Directions</strong> Select a direction for this rule, Ingress or Egress.</p>
+  </li>
+  <li>
+    <p><strong>Open Port</strong> Choose to open either a single port or a range of ports.</p>
+  </li>
+  <li>
+    <p><strong>Port</strong> Choose the port number or a range of ports.</p>
+  </li>
+  <li>
+    <p><strong>Remote</strong> Specify the source of the traffic to be allowed.</p>
+  </li>
+  <li>
+    <p>After completing, click on the “Add” button. It should bring up the window displayed below:</p>
+  </li>
+</ol>
+
+<p><img src="/images/chameleon/networking/security/image13.png" alt="" /></p>
+
+<p>Then you can see that the rule has been added to the Security Group ”tutorial_Security_Lab”</p>
+
+<h3 id="implement-the-rules-to-the-instances">2: Implement the rules to the instances</h3>
+
+<p>Once your security group has been setup you can implement it to the instance. There are 2 ways you can do it. You can do it while you lance a new instance like the following:</p>
+
+<p><img src="/images/chameleon/networking/security/image14.png" alt="" /></p>
+
+<p>Or you can change the security group of instances that have been created. To perform this operation, click on the “Edit Security Groups” Button.</p>
+
+<p><img src="/images/chameleon/networking/security/image15.png" alt="" /></p>
+
+<p>After click on the “Edit Security Groups” Button, you can see the following screen:</p>
+
+<p><img src="/images/chameleon/networking/security/image16.png" alt="" /></p>
+
+<p>You can add or remove security groups for your instance by click on the “+” or “-” buttons.</p>
+
+<h2 id="step-3-access-the-instance-securely-by-ssh">Step 3: Access the instance securely by SSH</h2>
+
+<p>You can access your instance securely by using SSH. In Chameleon, you can either get Open Stack to create an SSH key pair for you or use your own SSH key pair on your machine. We are going to introduce them respectively.</p>
+
+<h3 id="using-public-key-pair-created-by-chameleon">1: Using Public Key Pair created by Chameleon</h3>
+
+<p>Go to <strong>Project</strong> &gt; <strong>Compute</strong> &gt; <strong>Access &amp; Security</strong>, then select the Key Pairs tab.</p>
+
+<p><img src="/images/chameleon/networking/security/image17.png" alt="" /></p>
+
+<p>Here you click on the “Create Key Pair” button, and it should bring up the window displayed below:</p>
+
+<p><img src="/images/chameleon/networking/security/image18.png" alt="" /></p>
+
+<p>Pick a name for your Key Pair, and click on the “Create Key Pair” button. Then the Chameleon will create a key Pair for you. Key pairs are ssh credentials which are injected into images when they are launched. Creating a new key pair registers the public key and downloads the private key (a .pem file). Please protect the private key in a secure folder (for example: only your account have the full rights on this folder, and the other accounts have no access right to this folder).</p>
+
+<p>After your instance is launched, you should be able to connect to the instance via SSH using the cc account. In a terminal, type <code class="highlighter-rouge">ssh cc@&lt;floating_ip&gt;</code>`, in our example this would be</p>
+
+<p><code class="highlighter-rouge">ssh -i /Users/zhuronghua/documents/key/ron\_chameleon.pem cc@129.114.34.122</code></p>
+
+<p>Type yes and press Enter. You should arrive to a prompt like this one:</p>
+
+<p><code class="highlighter-rouge">cc@ron-xzn964-n01 ~$</code></p>
+
+<h3 id="using-your-own-public-key-pair">2: Using your own Public Key Pair.</h3>
+
+<p>You still can use your own SSH key pair on your machine.</p>
+
+<p>Go to Project &gt; Compute &gt; Access &amp; Security, then select the Key Pairs tab. Click on “Import Key Pair”.</p>
+
+<p><img src="/images/chameleon/networking/security/image19.png" alt="" /></p>
+
+<p>It should bring up the window displayed below:</p>
+
+<p><img src="/images/chameleon/networking/security/image20.png" alt="" /></p>
+
+<p>Enter a name for the key pair, for example laptop. In the “Public Key” box, copy the content of your SSH public key. Typically it will be at ~/.ssh/id_rsa.pub. On Mac OS X, you can run in a terminal:</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>cat ~/.ssh/id_rsa.pub</td>
+      <td>pbcopy</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>It copies the content of the public key to your copy/paste buffer. Then you can simply paste in the “Public Key” box. Then, click on the blue “Import Key Pair” button. This should show you the list of key pairs, with the one you just added.</p>
+
+<p><img src="/images/chameleon/networking/security/image21.png" alt="" /></p>
+
+<p>Now you should be able to connect to the instance via SSH using the cc account. In a terminal, type ssh cc@<floating_ip>, in our example this would be</floating_ip></p>
+
+<p>ssh cc@129.114.34.80</p>
+
+<p>SSH will probably tell you:</p>
+
+<p>The authenticity of host ‘129.114.34.80 (129.114.34.80)’ can’t be established.</p>
+
+<p>RSA key fingerprint is 5b:ca:f0:63:6f:22:c6:96:9f:c0:4a:d8:5e:dd:fd:eb.</p>
+
+<p>Are you sure you want to continue connecting (yes/no)?</p>
+
+<p>Type yes and press Enter. You should arrive to a prompt like this one:</p>
+
+<p><code class="highlighter-rouge">cc@my-first-instance ~$</code>`</p>
+
+<h2 id="step-4-floating-ips">Step 4: Floating IPs</h2>
+
+<p>The Floating IPs subsection of the Chameleon Cloud web interface provides an easy-to-use method of managing the IPs of a project on an instance-by-instance basis. The actions one may take include allocating or deallocating IPs for the project as a whole as well as individual IP address assignment. Within the context of the Chameleon Cloud, Floating IPs serve as publicly available IP address that maps to the assigned internal port of a network.</p>
+
+<p>This tutorial is more so an interactive way to get a user accustomed to how to manipulate Floating IPs and what usability they can provide. Going into this tutorial, the expectation is that the user already has an instance created. If the Floating IP is changed for an instance, the user must also change their current configuration and setup for that specific instance upon association.</p>
+
+<h3 id="navigating-the-floating-ips-subsection">1: Navigating the Floating IPs Subsection**</h3>
+
+<p>Starting from the beginning, navigate to the project homepage whose IPs you wish to manage. The <a href="https://ironic.chameleon.tacc.utexas.edu/dashboard/project/">primary dashboard page</a>, should look as follows.</p>
+
+<p><img src="/images/chameleon/networking/security/image22.png" alt="" /></p>
+
+<p>On the left-hand side, in the collapsible menu, find and click on <strong>Project &gt; Compute &gt; Access &amp; Security</strong></p>
+
+<p>From the <strong>Access &amp; Security</strong> section, you may now navigate to the <strong>Floating IPs</strong> subsection.</p>
+
+<p><img src="/images/chameleon/networking/security/image23.png" alt="" /></p>
+
+<p>Now, you will be presented with the main Floating IPs page where we will be managing the IP addresses for our project.</p>
+
+<p><img src="/images/chameleon/networking/security/image24.png" alt="" /></p>
+
+<p>Mainly presented on the page above is a table that is broken into different columns. The first column, <strong>IP Address</strong>, lists the public-facing IP address for the row. Second is the <strong>Mapped Fixed IP Address</strong>, which is used to show the instance, if any, the IP address is currently assigned to. Additionally, it also shows which internal IP address the floating IP is mapped to. Next, the <strong>Floating IP Pool</strong> column displays which of the networks the floating IP is from. Finally, the <strong>Actions</strong> column contains a dropdown menu, button combination which allows control over each entry that we will cover in the following sections.</p>
+
+<p><strong>Step 4.2: Allocate a Floating IP Address</strong></p>
+
+<p>Depending on the current state of your project, you may have several IP addresses already allocated to your project or may not have any. In the previous screen captures, you can see that the example showed several already allocated IP addresses in various states of use. To start with, we will allocate a Floating IP address. <strong>NOTE: You may not allocate a Floating IP Address if you have already reached the maximum permitted Floating IPs for the project.</strong></p>
+
+<p>In order to allocate a Floating IP Address, click on the <strong>Allocate IP to Project</strong> button located towards the upper right-hand side of the inner page.</p>
+
+<p><img src="/images/chameleon/networking/security/image25.png" alt="" /></p>
+
+<p>After clicking the button, a dialog will appear over the current page for information and details about the IP that will be allocated. The box contains information about which pool the floating IP will be allocated from. This also shows the current number of allocated floating IPs for your project as well as your limit. Once you have confirmed the settings, click <strong>Allocate IP</strong>.</p>
+
+<p><img src="/images/chameleon/networking/security/image26.png" alt="" /></p>
+
+<p>Once complete, you will be returned to the Floating IPs page which will now be updated to show the newly allocated IP address at the bottom row of the table.</p>
+
+<p><img src="/images/chameleon/networking/security/image27.png" alt="" /></p>
+
+<p>Upon completing this, you now have an additional floating IP address allocated to your project.</p>
+
+<p><strong>Step 4.3: Associate a Floating IP Address</strong></p>
+
+<p>Now that we have allocated a new Floating IP Address for us to use, we are going to use the “free” IP and associate it with the instance that currently does not have an external IP address assigned to it. From the main Floating IPs page, find the IP address that you wish to assign to your instance. Once found, follow the row all the way to the right and click on the <strong>Associate</strong> button.</p>
+
+<p><img src="/images/chameleon/networking/security/image28.png" alt="" /></p>
+
+<p>Next you will be shown a new dialog to set up which IP address should be associated with which instance. By default, the IP address whose row you selected from the previous page will be placed into the drop-down menu, but the menu will display all currently allocated and disassociated floating IP addresses belonging to the project. The second drop-down menu is a list of instances currently within the project that an IP address may be assigned to. Find the instance that does not have a floating IP address assigned and select it. Finally, click <strong>Associate</strong> to finalize the association.</p>
+
+<p><img src="/images/chameleon/networking/security/image29.png" alt="" /></p>
+
+<p>It is also beneficial to note that from this screen, one may also click the <strong>+</strong> button in order to allocate additional IP addresses similar to the method described in Step 4.1.</p>
+
+<p><strong>Step 4.4: Disassociate a Floating IP Address</strong></p>
+
+<p>Step 4.4 will cover how to go about disassociating an already associated IP address from an instance so that it may be moved around, used, or released.</p>
+
+<p>To begin with, find the IP address column of the IP address you wish to disassociate. Once you have selected which IP address to disassociate, follow the column to the right and click the <strong>Disassociate</strong> button.</p>
+
+<p><img src="/images/chameleon/networking/security/image30.png" alt="" /></p>
+
+<p>This button will spawn a dialog that is used to confirm the IP address you wish to disassociate. Review it to ensure that you have selected the correct floating IP address.</p>
+
+<p><img src="/images/chameleon/networking/security/image31.png" alt="" /></p>
+
+<p><strong>Step 4.5: Release a Floating IP Address</strong></p>
+
+<p>The final step will show how to release a floating IP address from your project back into the floating IP pool. Whether a floating IP address is associated or not does not change whether or not it may be freely released. In such a case that a currently associated IP address is released, it will be automatically disassociated before release. To release an IP address, find the column in the table of the IP address you wish to release and click the drop-down menu. Select <strong>Release Floating IP</strong>.</p>
+
+<p><img src="/images/chameleon/networking/security/image32.png" alt="" /></p>
+
+<p><img src="/images/chameleon/networking/security/image33.png" alt="" /></p>
+
+<p>Either of the two will work for disassociating an IP address. Once selected, you will be prompted with a confirmation dialog to ensure that you are releasing the correct floating IP. If you confirm the IP address, click the <strong>Release Floating IP</strong> button.</p>
+
+<p><img src="/images/chameleon/networking/security/image34.png" alt="" /></p>
+
+<p>Upon releasing a floating IP, you will find that it will be deleted from your project’s Floating IPs table and is made available to the pool from where it was allocated originally. It is important to make note that once an IP address is released and no longer part of the project, there can be no guarantee that the same IP address can be retrieved through allocation, so take caution that nothing will break when you go through with releasing the IPs.</p>
+
+<p>Should the need arise, the table also supports group actions on multiple IP addresses. In this case, it may be used to release all disassociated floating IPs from the project so that each IP has a corresponding instance. To do so, first use the check boxes to select all the floating IP addresses you wish to release. Once selected, click the <strong>Release Floating IPs</strong> button.</p>
+
+<p><img src="/images/chameleon/networking/security/image35.png" alt="" /></p>
+
+<p>With the previous actions, this one will also bring up a confirmation dialog to ensure that you are releasing the correct IPs. Read over the list to make sure that you are not releasing any IP that you did not mean to.</p>
+
+<p><img src="/images/chameleon/networking/security/image36.png" alt="" /></p>
+
+<p><strong>Appendix A: Generating and Using SSH Key Pairs on Windows Platforms</strong></p>
+
+<p>First, we will need to download tools to generate our key pair, as well as an SSH client that can make use of them. These tools are called PuTTYGen and PuTTY, respectively.</p>
+
+<p>The location to download PuTTYGen is:
+<a href="http://the.earth.li/~sgtatham/putty/latest/x86/puttygen.exe">http://the.earth.li/~sgtatham/putty/latest/x86/puttygen.exe</a></p>
+
+<p>The location to download PuTTY is:
+<a href="http://the.earth.li/~sgtatham/putty/latest/x86/putty.exe">http://the.earth.li/~sgtatham/putty/latest/x86/putty.exe</a></p>
+
+<p>Download and run the PuTTYGen executable:</p>
+
+<p>Click on the “Generate” button and move your mouse as indicated in order to generate enough random movement with which to help create your new key pair. When the process has completed, you may enter a password into the “Key passphrase” input box in order to protect your private key.</p>
+
+<p>Click on the “Save private key” button and save this file to a location you can easily recall later.</p>
+
+<p>Copy the text in the “Public key for pasting into OpenSSH authorized_keys file:” input field. This is your public key that will be input into the Chameleon cloud web interface.</p>
+
+<p>To connect to a Chameleon server, download and execute the PuTTY tool. Enter the public IP address into the “Host Name (or IP address)” input box.</p>
+
+<p>Next, in order to specify a private key file, click on the Connection &gt; SSH &gt; Auth menu item on the left. Click on the “Browse” button and select your private key file.</p>
+
+<p>Finally, click the “Open” button to connect using this key.</p>
+
+
+    </div>
+
+    </div>
+
+    <!--
+    <div class="row"><div class="col-xs-12 col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6 col-xl-offset-4 col-xl-4">
+
+    <div id="disqus_thread" style="margin-top: 20px; margin-bottom: 20px;"></div>
+    <script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'cloudandbigdatalab';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+</div></div>
+-->
+
+</div>
+
+<footer>
+  <hr>
+  <div class="container-fluid text-center">
+    <p>
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&repo=cloudandbigdatalab.github.io&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&repo=cloudandbigdatalab.github.io&type=watch&count=true&v=2" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&repo=cloudandbigdatalab.github.io&type=fork&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&type=follow&count=true" frameborder="0" scrolling="0" width="200px" height="20px"></iframe>
+    </p>
+    <div class="row" style="display:inline-block;vertical-align:middle;">
+       <div class="col-xs-6 col-lg-2">
+	       <a href="https://www.ci.uchicago.edu"> <img src ="../images/logos/ci.png" alt="Computer Institute." style="width: auto; height: 120px; padding: 20px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2" style="padding:25px;">
+	       <a href="https://www.tacc.utexas.edu"><img src ="../images/logos/tacc.svg" alt="Texas Advanced Computing Center" style="width: auto; height: 70px; padding: 20px;"></a>
+       </div>
+       <div class="col-xs-6 col-lg-2" style="padding:25px;">
+	       <a href="http://www.icair.org"> <img src="../images/logos/icair.png" alt="international Center for Internet Research." style="width: auto; height: 75px; padding: 20px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2" style="padding:40px;">
+	       <a href="https://www.osu.edu">  <img src="../images/logos/osu.jpg" style="height:" alt="Ohio State University" style="width: auto; height: 90px; padding: 25px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2">
+	       <a href="http://www.utsa.edu"> <img src="../images/logos/utsa.png" alt="University of Texas at San Antonio" style="width: auto; height: 120px; padding: 20px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2">
+	       <a href="http://www.nsf.gov"> <img src="../images/logos/nsf.jpg" alt="National Security Foundation" style="width: auto; height: 120px; padding: 20px;"></img></a>
+       </div>
+    <hr>
+    &nbsp;
+    <p style="padding-top:1em;font-size=1.25em; text-align:center;">Chameleon Cloud is funded by a grant from the National Science Foundation.</p>
+
+  </div>
+</footer>
+
+
+</body>
+
+</html>

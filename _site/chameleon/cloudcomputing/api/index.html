@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <meta charset="utf-8">
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UTSA OCI Training - Cloud Computing - API</title>
+<meta name="description" content="some stuff">
+<meta name="keywords" content="Cloud and Big Data, cloud and big data lab, utsa open cloud institute, open cloud institute, UTSA OCI, Software Defined Storage, SAS, Network Function Virtualization, NFV, Big Data & Machine Learning, Cloud Computing, Cloud Storage,Containerization">
+<meta name="geo.position" content="29.424122;-98.493629">
+<meta name="geo.country" content="US">
+<meta name="geo.region" content="US-TX">
+<meta name="msvalidate.01" content="A48032010EFA0B727FEBFDA61E33014C" />
+<link rel="stylesheet" href="/stylesheets/main.css">
+<link rel="stylesheet" href="/stylesheets/custom.css">
+<script src="/javascripts/jquery-1.11.3.min.js"></script>
+<script src="/javascripts/bootstrap.min.js"></script>
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-68778127-1', 'auto');ga('send', 'pageview');
+</script>
+<link rel="canonical" href="https://cloudandbigdatalab.github.com/chameleon/cloudcomputing/api/"/>
+
+
+</head>
+
+<body>
+
+  <header>
+</header>
+
+
+  <div class="container-fluid">
+
+    <div class="row">
+
+      <div class="
+      col-xs-12
+      col-sm-offset-1 col-sm-10
+      col-md-offset-2 col-md-8
+      col-lg-offset-3 col-lg-6
+      " style="margin-top: 20px; margin-bottom: 20px;">
+
+      <div class="visible-print-block">
+        <img src="/images/nsf.png" style="width: 100px; height: 100px;"></img>
+        <h1>Chameleon Cloud Tutorial</h1>
+        <p>National Science Foundation</p>
+        <p>Program Solicitation # NSF 13-602</p>
+        <p>CISE Research Infrastructure: Mid-Scale Infrastructure - NSFCloud (CRI: NSFCloud)</p>
+
+      </div>
+
+      <div class="hidden-print">
+      <ol class="breadcrumb">
+        <li><a href="/chameleon">Chameleon</a></li>
+        <li>Cloud Computing</li>
+        <li class="active">API</li>
+      </ol>
+
+      
+      
+      
+      
+
+      <a class="btn btn-default disabled" role="button" target="_blank" href=""><span class="glyphicon glyphicon-link" aria-hidden="true"></span> Lab</a>
+
+      <a class="btn btn-default disabled" role="button" target="_blank" href=""><span class="glyphicon glyphicon-film" aria-hidden="true"></span> Video</a>
+
+      <a class="btn btn-default" role="button" target="_blank" href="/pdf/chameleon-cloudcomputing-api.pdf" download><span class="glyphicon glyphicon-file" aria-hidden="true"></span> PDF</a>
+    </div>
+
+      <h1>Cloud Computing - API</h1>
+
+      <h2 id="objectives">Objectives</h2>
+
+<p>In this tutorial, you will learn about the Application program Interface ,how it works with open stack.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Action</th>
+      <th>Detail</th>
+      <th>Time (min)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Introduction of API on Open Stack</td>
+      <td>You will learn what is API and how it works with Open Stack.</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Nova CLI installation and Configure RC file</td>
+      <td>To begin, we will learn the process of installing NOVA CLI and how to configure RC file</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Key Stone Introduction and installation</td>
+      <td>We will discuss about Key stone its features and how API works with Key Stone.</td>
+      <td>15</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Nova Usage</td>
+      <td>Lastly, we will implement the Nova on API</td>
+      <td>10</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="prerequisites">Prerequisites</h2>
+
+<ul>
+  <li>
+    <p>Knowledge of API</p>
+  </li>
+  <li>
+    <p>A SSH Client(how to use SSH)</p>
+  </li>
+  <li>
+    <p>Basic Knowledge of LINUX</p>
+  </li>
+  <li>
+    <p>Basic knowledge on Open Stack applications.</p>
+  </li>
+</ul>
+
+<h2 id="introduction">Introduction</h2>
+
+<h3 id="what-is-application-program-interface">What is Application Program Interface?</h3>
+
+<p>An application program interface (API) is code that allows two software programs to communicate with each other. Typically, APIs are released for third-party development as part of a software development kit (SDK) or as an open API published on the Internet.</p>
+
+<h3 id="what-is-open-api">What is Open API?</h3>
+
+<p>Open API (often referred to as OpenAPI new technology) is a term used in the Application Programming Interface (API) process that uses sets of technologies that enable websites to interact with each other by using REST, SOAP, JAVA SCRIPT other web technologies.</p>
+
+<h3 id="how-api-works">How API works?</h3>
+
+<p><img src="image5.png" alt="" /></p>
+
+<p><strong>API for OPEN STACK</strong></p>
+
+<p>A set of language bindings that provide a language-level API for accessing OpenStack in a manner consistent with language standards.</p>
+
+<p><img src="image6.png" alt="" /></p>
+
+<p>Each OpenStack project provides a command-line client, which enables you to access the project API through easy-to-use commands</p>
+
+<p>Some of the Open Stack Services and Clients</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Service</th>
+      <th>Client</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Block Storage</td>
+      <td>Cinder</td>
+    </tr>
+    <tr>
+      <td>Compute</td>
+      <td>Nova</td>
+    </tr>
+    <tr>
+      <td>Object Storage</td>
+      <td>Swift</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="nova-cli-installation">Nova CLI installation</h2>
+
+<p>Nova which is a client for Compute service which creates and manages images , instances and flavors.</p>
+
+<p>Installing nova using pip</p>
+
+<p><code class="highlighter-rouge">pip install python-novaclien</code></p>
+
+<p>Uninistall Nova</p>
+
+<p><code class="highlighter-rouge">pip uninstall python-novaclient</code></p>
+
+<h3 id="configuration-of-rc-file">Configuration of RC file</h3>
+
+<p>Login to the Chameloen Account &gt; Project &gt; Access &amp; Security &gt; API Access</p>
+
+<p><img src="image7.png" alt="" /></p>
+
+<p>Click on the Download Open Stack RC file and save it.</p>
+
+<h3 id="advanced-resource-leasing-reservation">Advanced resource leasing reservation.</h3>
+
+<p>Login to the Chameloen account &gt; Project &gt; Reservation &gt; Leases &gt; Create Lease/Delete Lease.</p>
+
+<p><img src="image8.png" alt="" /></p>
+
+<h3 id="let-us-check-how-nova-works">Let us check how NOVA works</h3>
+
+<ul>
+  <li>Using Chameleon account Create an instance</li>
+</ul>
+
+<p><img src="image9.png" alt="" /></p>
+
+<ul>
+  <li>
+    <p>Login to port that is associated with the IP address.</p>
+  </li>
+  <li>
+    <p>Use the following Commands.</p>
+  </li>
+</ul>
+
+<p>Open the RC configuration file that we have saved already.</p>
+
+<p><code class="highlighter-rouge">cat CH-816772-openrc.sh</code></p>
+
+<p>The file looks in the below format and verify the highlighted fields.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+
+<span class="c"># To use an Openstack cloud you need to authenticate against keystone, which</span>
+<span class="c"># returns a **Token** and **Service Catalog**.  The catalog contains the</span>
+<span class="c"># endpoint for all services the user/tenant has access to - including nova,</span>
+<span class="c"># glance, keystone, swift.</span>
+<span class="c">#</span>
+<span class="c"># *NOTE*: Using the 2.0 *auth api* does not mean that compute api is 2.0.  We</span>
+<span class="c"># will use the 1.1 *compute api*</span>
+<span class="nb">export </span><span class="nv">OS_AUTH_URL</span><span class="o">=</span>https://ironic.chameleon.tacc.utexas.edu:5000/v2.0
+
+<span class="c"># With the addition of Keystone we have standardized on the term **tenant**</span>
+<span class="c"># as the entity that owns the resources.</span>
+<span class="nb">export </span><span class="nv">OS_TENANT_ID</span><span class="o">=</span>CH-816772
+<span class="nb">export </span><span class="nv">OS_TENANT_NAME</span><span class="o">=</span><span class="s2">"CH-816772"</span>
+
+<span class="c"># In addition to the owning entity (tenant), openstack stores the entity</span>
+<span class="c"># performing the action as the **user**.</span>
+<span class="nb">export </span><span class="nv">OS_USERNAME</span><span class="o">=</span><span class="s2">"paulrad"</span>
+
+<span class="c"># With Keystone you pass the keystone password.</span>
+<span class="nb">echo</span> <span class="s2">"Please enter your OpenStack Password: "</span>
+<span class="nb">read</span> -sr OS_PASSWORD_INPUT
+<span class="nb">export </span><span class="nv">OS_PASSWORD</span><span class="o">=</span><span class="nv">$OS_PASSWORD_INPUT</span>
+
+<span class="c"># If your configuration has multiple regions, we set that information here.</span>
+<span class="c"># OS_REGION_NAME is optional and only valid in certain environments.</span>
+<span class="nb">export </span><span class="nv">OS_REGION_NAME</span><span class="o">=</span><span class="s2">"regionOne"</span>
+<span class="c"># Don't leave a blank variable, unset it if it was empty</span>
+<span class="k">if</span> <span class="o">[</span> -z <span class="s2">"</span><span class="nv">$OS_REGION_NAME</span><span class="s2">"</span> <span class="o">]</span>; <span class="k">then </span><span class="nb">unset </span>OS_REGION_NAME; <span class="k">fi</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">source CH-816772-openrc.sh</code></p>
+
+<h2 id="keystone">KeyStone</h2>
+
+<p>Keystone is an OpenStack project that provides Identity, Token, Catalog and Policy services for use specifically by projects in the OpenStack family. It implements Open Stack’s Identity API</p>
+
+<p>Prerequisites for Keystone development</p>
+
+<ul>
+  <li>
+    <p>Git</p>
+  </li>
+  <li>
+    <p>Phython latest version</p>
+  </li>
+  <li>
+    <p>Virtual env</p>
+  </li>
+  <li>
+    <p>pip</p>
+  </li>
+  <li>
+    <p>msgfmt(part of gittext package)</p>
+  </li>
+  <li>
+    <p>setuptools.</p>
+  </li>
+</ul>
+
+<p>Setup steps for keystone</p>
+
+<p><code class="highlighter-rouge">git clone https://git.openstack.org/openstack/keystone.git</code></p>
+
+<p>installing dependencies—for ubuntu</p>
+
+<p><code class="highlighter-rouge">sudo apt-get install python-dev python3-dev libxml2-dev libxslt1-dev libsasl2-dev libsqlite3-dev libssl-dev libldap2-dev libffi-dev</code></p>
+
+<p>Installing virtual environment and activating it</p>
+
+<p><code class="highlighter-rouge">python tools/install\_venv.py</code></p>
+
+<p><code class="highlighter-rouge">source .venv/bin/activate</code></p>
+
+<p>Install the dependencies for running keystone</p>
+
+<p><code class="highlighter-rouge">pip install -r requirements.txt</code></p>
+
+<p>Install the dependencies for developing, testing, and running keystone</p>
+
+<p><code class="highlighter-rouge">pip install -r test-requirements.txt</code></p>
+
+<p>Use <code class="highlighter-rouge">python setup.py</code> to link Keystone into Python’s site-packages</p>
+
+<p><code class="highlighter-rouge">python setup.py develop</code></p>
+
+<p>Verifying keystone is set up perfectly</p>
+
+<p><code class="highlighter-rouge">source .venv/bin/activate</code></p>
+
+<p>you should be able to import keystone with out any issue</p>
+
+<p><code class="highlighter-rouge">python -c "import keystone"</code></p>
+
+<p>Developing with Keystone</p>
+
+<p>Configuring Keystone</p>
+
+<p><code class="highlighter-rouge">cp etc/keystone.conf.sample etc/keystone.conf</code></p>
+
+<p>Running Keystone</p>
+
+<p><code class="highlighter-rouge">tools/with_venv.sh bin/keystone-all</code></p>
+
+<p>Testing Keystone</p>
+
+<p><code class="highlighter-rouge">pip install tox</code></p>
+
+<p>To execute the tests just run</p>
+
+<p><code class="highlighter-rouge">tox</code></p>
+
+<h2 id="nova-usage">Nova Usage</h2>
+
+<h3 id="check-nova-usage">Check Nova usage</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>nova usage
+
+Usage from 2015-05-27 to 2015-06-25:
+
++---------+--------------+-----------+---------------+
+| Servers | RAM MB-Hours | CPU Hours | Disk GB-Hours |
++---------+--------------+-----------+---------------+
+| 22 | 12716184.32 | 9031.38 | 144502.09 |
+<span class="k">**</span>+---------+--------------+-----------+---------------+ <span class="k">**</span>
+</code></pre>
+</div>
+
+<h3 id="check-for-the-key-pair">Check for the Key Pair.</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>nova keypair-list
+
++---------------+-------------------------------------------------+
+| Name | Fingerprint |
++---------------+-------------------------------------------------+
+| Paul Rad | 5f:3e:27:7b:df:17:fe:18:15:7c:eb:65:84:14:75:7f |
+| Ron_Laptop | 50:09:57:56:7f:80:53:e6:97:87:df:f0:b0:38:c9:e6 |
+| Sam Silvestro | fa:c8:ba:fe:0e:7e:3e:a6:b3:b2:1f:61:25:31:37:0b |
+<span class="k">**</span>+---------------+-------------------------------------------------+ <span class="k">**</span>
+</code></pre>
+</div>
+
+<p>The above command will trigger the API of Nova and display the key pairs that are associated with it.</p>
+
+<h3 id="using-api-and-deleting-the-keypairs">Using API and deleting the keypairs</h3>
+
+<h4 id="nova-keypair-add">nova-keypair add</h4>
+
+<p><code class="highlighter-rouge">nova keypair-add Testkeypair &gt; Test.pem</code></p>
+
+<p><img src="image10.png" alt="" /></p>
+
+<h4 id="checking-for-key-list-to-ensure-the-keypair-is-added">Checking for key list to ensure the keypair is added</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>nova keypair-list
+
+<span class="k">**</span>+---------------+-------------------------------------------------+<span class="k">**</span>
+<span class="k">**</span>| Name | Fingerprint |<span class="k">**</span>
+<span class="k">**</span>+---------------+-------------------------------------------------+<span class="k">**</span>
+<span class="k">**</span>| Paul Rad | 5f:3e:27:7b:df:17:fe:18:15:7c:eb:65:84:14:75:7f |<span class="k">**</span>
+<span class="k">**</span>| Ron_Laptop | 50:09:57:56:7f:80:53:e6:97:87:df:f0:b0:38:c9:e6 |<span class="k">**</span>
+<span class="k">**</span>| Sam Silvestro | fa:c8:ba:fe:0e:7e:3e:a6:b3:b2:1f:61:25:31:37:0b |<span class="k">**</span>
+<span class="k">**</span>| Testkeypair | be:3b:25:b8:7c:74:79:65:bf:58:42:ad:41:83:8d:a7 |<span class="k">**</span>
+<span class="k">**</span>+---------------+-------------------------------------------------+<span class="k">**</span>
+</code></pre>
+</div>
+
+<h4 id="nova-keypair-delete">nova-keypair-delete</h4>
+
+<p><code class="highlighter-rouge">nova keypair-delete "TestKeypair"</code></p>
+
+<p>This will trigger to the NOVA API and deletes a key pair associated with it</p>
+
+<p><img src="image11.png" alt="" /></p>
+
+<h4 id="checking-the-keypair-list-to-verify-it-is-deleted-correctly">Checking the keypair list to verify it is deleted correctly</h4>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>nova keypair-list
+
++---------------+-------------------------------------------------+
+| Name | Fingerprint |
++---------------+-------------------------------------------------+
+| Paul Rad | 5f:3e:27:7b:df:17:fe:18:15:7c:eb:65:84:14:75:7f |
+| Ron_Laptop | 50:09:57:56:7f:80:53:e6:97:87:df:f0:b0:38:c9:e6 |
+| Sam Silvestro | fa:c8:ba:fe:0e:7e:3e:a6:b3:b2:1f:61:25:31:37:0b |
++---------------+-------------------------------------------------+
+</code></pre>
+</div>
+
+<p>This can be achieved using other Cloud Source API like Swift, glance, neutron, trove, OpenStack, Cinder, etc.</p>
+
+<h2 id="references">References</h2>
+
+<p><a href="http://docs.openstack.org/user-guide/cli_cheat_sheet.html#block-storage-cinder">http://docs.openstack.org/user-guide/cli_cheat_sheet.html#block-storage-cinder</a></p>
+
+<p><a href="http://docs.openstack.org/cli-reference/content/install_clients.html">http://docs.openstack.org/cli-reference/content/install_clients.html</a></p>
+
+
+    </div>
+
+    </div>
+
+    <!--
+    <div class="row"><div class="col-xs-12 col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6 col-xl-offset-4 col-xl-4">
+
+    <div id="disqus_thread" style="margin-top: 20px; margin-bottom: 20px;"></div>
+    <script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'cloudandbigdatalab';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+</div></div>
+-->
+
+</div>
+
+<footer>
+  <hr>
+  <div class="container-fluid text-center">
+    <p>
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&repo=cloudandbigdatalab.github.io&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&repo=cloudandbigdatalab.github.io&type=watch&count=true&v=2" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&repo=cloudandbigdatalab.github.io&type=fork&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&type=follow&count=true" frameborder="0" scrolling="0" width="200px" height="20px"></iframe>
+    </p>
+    <div class="row" style="display:inline-block;vertical-align:middle;">
+       <div class="col-xs-6 col-lg-2">
+	       <a href="https://www.ci.uchicago.edu"> <img src ="../images/logos/ci.png" alt="Computer Institute." style="width: auto; height: 120px; padding: 20px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2" style="padding:25px;">
+	       <a href="https://www.tacc.utexas.edu"><img src ="../images/logos/tacc.svg" alt="Texas Advanced Computing Center" style="width: auto; height: 70px; padding: 20px;"></a>
+       </div>
+       <div class="col-xs-6 col-lg-2" style="padding:25px;">
+	       <a href="http://www.icair.org"> <img src="../images/logos/icair.png" alt="international Center for Internet Research." style="width: auto; height: 75px; padding: 20px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2" style="padding:40px;">
+	       <a href="https://www.osu.edu">  <img src="../images/logos/osu.jpg" style="height:" alt="Ohio State University" style="width: auto; height: 90px; padding: 25px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2">
+	       <a href="http://www.utsa.edu"> <img src="../images/logos/utsa.png" alt="University of Texas at San Antonio" style="width: auto; height: 120px; padding: 20px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2">
+	       <a href="http://www.nsf.gov"> <img src="../images/logos/nsf.jpg" alt="National Security Foundation" style="width: auto; height: 120px; padding: 20px;"></img></a>
+       </div>
+    <hr>
+    &nbsp;
+    <p style="padding-top:1em;font-size=1.25em; text-align:center;">Chameleon Cloud is funded by a grant from the National Science Foundation.</p>
+
+  </div>
+</footer>
+
+
+</body>
+
+</html>

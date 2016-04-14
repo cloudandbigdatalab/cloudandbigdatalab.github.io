@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <meta charset="utf-8">
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UTSA OCI Training - Big Data and Machine Learning - Map Reduce (Python)</title>
+<meta name="description" content="Tutorials, blog posts, and research papers on cloud computing. Topics include security, networking, Docker, OpenStack, and Hadoop. Specific examples for NSF-funded Chameleon Cloud.">
+<meta name="keywords" content="Cloud and Big Data, cloud and big data lab, utsa open cloud institute, open cloud institute, UTSA OCI, Software Defined Storage, SAS, Network Function Virtualization, NFV, Big Data & Machine Learning, Cloud Computing, Cloud Storage,Containerization">
+<meta name="geo.position" content="29.424122;-98.493629">
+<meta name="geo.country" content="US">
+<meta name="geo.region" content="US-TX">
+<meta name="msvalidate.01" content="A48032010EFA0B727FEBFDA61E33014C" />
+<link rel="stylesheet" href="/stylesheets/main.css">
+<link rel="stylesheet" href="/stylesheets/custom.css">
+<script src="/javascripts/jquery-1.11.3.min.js"></script>
+<script src="/javascripts/bootstrap.min.js"></script>
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create', 'UA-68778127-1', 'auto');ga('send', 'pageview');
+</script>
+<link rel="canonical" href="https://cloudandbigdatalab.github.com/chameleon/hadoop/mapreduce-python/"/>
+
+
+</head>
+
+<body>
+
+  <header>
+</header>
+
+
+  <div class="container-fluid">
+
+    <div class="row">
+
+      <div class="
+      col-xs-12
+      col-sm-offset-1 col-sm-10
+      col-md-offset-2 col-md-8
+      col-lg-offset-3 col-lg-6
+      " style="margin-top: 20px; margin-bottom: 20px;">
+
+      <div class="visible-print-block">
+        <img src="/images/nsf.png" style="width: 100px; height: 100px;"></img>
+        <h1>Chameleon Cloud Tutorial</h1>
+        <p>National Science Foundation</p>
+        <p>Program Solicitation # NSF 13-602</p>
+        <p>CISE Research Infrastructure: Mid-Scale Infrastructure - NSFCloud (CRI: NSFCloud)</p>
+
+      </div>
+
+      <div class="hidden-print">
+      <ol class="breadcrumb">
+        <li><a href="/chameleon">Chameleon</a></li>
+        <li>Big Data and Machine Learning</li>
+        <li class="active">Map Reduce (Python)</li>
+      </ol>
+
+      
+      
+      
+      
+
+      <a class="btn btn-default disabled" role="button" target="_blank" href=""><span class="glyphicon glyphicon-link" aria-hidden="true"></span> Lab</a>
+
+      <a class="btn btn-default disabled" role="button" target="_blank" href=""><span class="glyphicon glyphicon-film" aria-hidden="true"></span> Video</a>
+
+      <a class="btn btn-default" role="button" target="_blank" href="/pdf/chameleon-hadoop-mapreduce-python.pdf" download><span class="glyphicon glyphicon-file" aria-hidden="true"></span> PDF</a>
+    </div>
+
+      <h1>Big Data and Machine Learning - Map Reduce (Python)</h1>
+
+      
+<p>In this tutorial, we will discuss about the Map and Reduce program, its implementation.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Action</th>
+      <th>Detail</th>
+      <th>Time (min)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Implementation of multiple MapReduce programs</td>
+      <td>You will learn how to implement MapReduce programs on everyday scenario’s</td>
+      <td>15</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Execution of MapReduce programs</td>
+      <td>In this session you will get familiar on how to execute the MapReduce program and the analysis of the input data.</td>
+      <td>10</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="prerequisites">Prerequisites</h2>
+
+<p>The following prerequisites are expected for successful completion of this tutorial:</p>
+
+<ul>
+  <li>
+    <p><a href="http://chameleoncloud.org/user/register/">Chameleon Cloud account</a></p>
+  </li>
+  <li>
+    <p>SSH client (Windows users: download <a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html">PuTTY</a>)</p>
+  </li>
+  <li>
+    <p>A basic knowledge of Linux.</p>
+  </li>
+  <li>
+    <p>Installation of Hadoop and Map reduce.</p>
+  </li>
+  <li>
+    <p>Single node set up.</p>
+  </li>
+</ul>
+
+<h2 id="step-1-implementation-of-mapreduce">Step 1: Implementation of MapReduce</h2>
+
+<p>Login to the system with user id ‘CC’ and enter to establish the connection.</p>
+
+<p><img src="/images/chameleon/hadoop/mapreduce-python/image5.png" alt="" /></p>
+
+<p>Enter to establish connection (Authenticate with the public key)</p>
+
+<p><img src="/images/chameleon/hadoop/mapreduce-python/image6.png" alt="" /></p>
+
+<p>Change the directory to MapReduce-Basics-master (hadoop-mapreduce-MaReduce-Basics-master)</p>
+
+<p><img src="/images/chameleon/hadoop/mapreduce-python/image7.png" alt="" /></p>
+
+<p>View the files present in the MapReduce-Basics-master directory using ls command.</p>
+
+<p><img src="/images/chameleon/hadoop/mapreduce-python/image8.png" alt="" /></p>
+
+<p>Move to the data directory where the input data is stored.</p>
+
+<p><img src="/images/chameleon/hadoop/mapreduce-python/image9.png" alt="" /></p>
+
+<h3 id="inverted-index">Inverted Index:</h3>
+
+<p>In this the input Json file contains document _id and the sample text, where</p>
+
+<p><strong>document_id</strong> - An document identifier formatted as string</p>
+
+<p><strong>text</strong> - Document formatted as a string.</p>
+
+<p>Output file contains (word, document ID list) where word is an string and the document ID list is list of strings.</p>
+
+<p><strong>Input text file:</strong></p>
+
+<p>Open the data directory to view the input json file. Use the below command shown in the screen print to view the books.json file.</p>
+
+<p><img src="/images/chameleon/hadoop/mapreduce-python/image10.png" alt="" /></p>
+
+<p>Below books.json file is displayed after executing the above commands shown in the screen print.</p>
+
+<p><img src="/images/chameleon/hadoop/mapreduce-python/image11.png" alt="" /></p>
+
+<p>Open invert_index.py file to view the map and reducer program which is used to generate the output file.</p>
+
+<p><strong>Defaultdict:</strong> whenever you need a dictionary, and each element’s value should start with a default value, so use a <strong>defaultdict</strong>.</p>
+
+<p><strong>Mapper:</strong> Document identifier content is stored in key and the document content is stored to value.</p>
+
+<p>It uses for loop for the words and if loop to match the words from the different txt files.</p>
+
+<p><strong>Reducer:</strong> It lists the word and the txt file which contains the key word.</p>
+
+<p><img src="/images/chameleon/hadoop/mapreduce-python/image12.png" alt="" /></p>
+
+<p><strong>Output of the Invert_index file:</strong></p>
+
+<p>To generate the output file we need to execute the below command</p>
+
+<p><img src="/images/chameleon/hadoop/mapreduce-python/image13.png" alt="" /></p>
+
+<p><strong>Output file:</strong> The output file displays the word and its corresponding text file.</p>
+
+<p><img src="/images/chameleon/hadoop/mapreduce-python/image14.png" alt="" /></p>
+
+<h2 id="friends-count">Friends Count:</h2>
+
+<p>In this program each key is a person and each value is a friend of the person. This program mainly counts number of friends each person has.</p>
+
+<p><img src="/images/chameleon/hadoop/mapreduce-python/image15.png" alt="" /></p>
+
+<p>The input is a two element list: [personA, personB] where</p>
+
+<p><strong>personA</strong> - Name of a person formatted as a string</p>
+
+<p><strong>personB</strong> - Name of the personA’s friend formatted as a string.</p>
+
+<p>The output of the program should be (person, friend count) where person is a string and the friend count is an integer describing number of friends that the person has.</p>
+
+<p><strong>Input file( friends.json):</strong> Input file contains the list of friends names.</p>
+
+<p><img src="/images/chameleon/hadoop/mapreduce-python/image16.png" alt="" /></p>
+
+<p>Open friends_count.py file to view the code used to get the count of the friends.</p>
+
+<p><img src="/images/chameleon/hadoop/mapreduce-python/image17.png" alt="" /></p>
+
+<p><strong>Mapper:</strong> Key stores value of the personA’s name who has friend and value stores the friends count(PersonA).</p>
+
+<p><strong>Reducer:</strong> mr.emit displays the personA name and the count of friends personA has.</p>
+
+<p><img src="/images/chameleon/hadoop/mapreduce-python/image18.png" alt="" /></p>
+
+<p><strong>Output:</strong> Execute the below command to display the results</p>
+
+<p><img src="/images/chameleon/hadoop/mapreduce-python/image19.png" alt="" /></p>
+
+<p>Output file displays the person name and the count of friends.</p>
+
+<p><img src="/images/chameleon/hadoop/mapreduce-python/image20.png" alt="" /></p>
+
+<h2 id="asymmetric-friendship">Asymmetric Friendship:</h2>
+
+<p>In this program we implemented MapReduce algorithm to generate a list of all non symmetric friend relationship.</p>
+
+<p>The input is a two element list: [personA, personB] where</p>
+
+<p><strong>personA</strong> - Name of a person formatted as a string</p>
+
+<p><strong>personB</strong> - Name of the personA’s friend formatted as a string.</p>
+
+<p><img src="/images/chameleon/hadoop/mapreduce-python/image21.png" alt="" /></p>
+
+<p><strong>Mapper:</strong> record[0] value is stored to person_a and record[1] value is stored to person_b where the final output of the mapper displays both (friend_a, friend_b) list along with(friend_b, friend_a) list.</p>
+
+<p><img src="/images/chameleon/hadoop/mapreduce-python/image22.png" alt="" /></p>
+
+<p>Open friends.json file to view the input folder, where the json file displays the list of friends.</p>
+
+<p><img src="/images/chameleon/hadoop/mapreduce-python/image23.png" alt="" /></p>
+
+<p>By executing above command it displays the list of friends data which is used to execute the specified algorithm.</p>
+
+<p><img src="/images/chameleon/hadoop/mapreduce-python/image24.png" alt="" /></p>
+
+<p>Execute the program by giving the below command by providing file which contain the program and the input data file which is used for processing.</p>
+
+<p><img src="/images/chameleon/hadoop/mapreduce-python/image25.png" alt="" /></p>
+
+<p>After executing the above program it displays the asymmetric relation values both (friend_a, friend_b) and (friend_b , friend_a).</p>
+
+<p><img src="/images/chameleon/hadoop/mapreduce-python/image26.png" alt="" /></p>
+
+
+    </div>
+
+    </div>
+
+    <!--
+    <div class="row"><div class="col-xs-12 col-sm-offset-1 col-sm-10 col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6 col-xl-offset-4 col-xl-4">
+
+    <div id="disqus_thread" style="margin-top: 20px; margin-bottom: 20px;"></div>
+    <script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES * * */
+    var disqus_shortname = 'cloudandbigdatalab';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+</div></div>
+-->
+
+</div>
+
+<footer>
+  <hr>
+  <div class="container-fluid text-center">
+    <p>
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&repo=cloudandbigdatalab.github.io&type=star&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&repo=cloudandbigdatalab.github.io&type=watch&count=true&v=2" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&repo=cloudandbigdatalab.github.io&type=fork&count=true" frameborder="0" scrolling="0" width="100px" height="20px"></iframe>
+
+      <iframe src="https://ghbtns.com/github-btn.html?user=cloudandbigdatalab&type=follow&count=true" frameborder="0" scrolling="0" width="200px" height="20px"></iframe>
+    </p>
+    <div class="row" style="display:inline-block;vertical-align:middle;">
+       <div class="col-xs-6 col-lg-2">
+	       <a href="https://www.ci.uchicago.edu"> <img src ="../images/logos/ci.png" alt="Computer Institute." style="width: auto; height: 120px; padding: 20px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2" style="padding:25px;">
+	       <a href="https://www.tacc.utexas.edu"><img src ="../images/logos/tacc.svg" alt="Texas Advanced Computing Center" style="width: auto; height: 70px; padding: 20px;"></a>
+       </div>
+       <div class="col-xs-6 col-lg-2" style="padding:25px;">
+	       <a href="http://www.icair.org"> <img src="../images/logos/icair.png" alt="international Center for Internet Research." style="width: auto; height: 75px; padding: 20px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2" style="padding:40px;">
+	       <a href="https://www.osu.edu">  <img src="../images/logos/osu.jpg" style="height:" alt="Ohio State University" style="width: auto; height: 90px; padding: 25px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2">
+	       <a href="http://www.utsa.edu"> <img src="../images/logos/utsa.png" alt="University of Texas at San Antonio" style="width: auto; height: 120px; padding: 20px;"></img></a>
+       </div>
+       <div class="col-xs-6 col-lg-2">
+	       <a href="http://www.nsf.gov"> <img src="../images/logos/nsf.jpg" alt="National Security Foundation" style="width: auto; height: 120px; padding: 20px;"></img></a>
+       </div>
+    <hr>
+    &nbsp;
+    <p style="padding-top:1em;font-size=1.25em; text-align:center;">Chameleon Cloud is funded by a grant from the National Science Foundation.</p>
+
+  </div>
+</footer>
+
+
+</body>
+
+</html>
