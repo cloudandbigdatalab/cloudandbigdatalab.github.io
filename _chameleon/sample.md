@@ -10,7 +10,7 @@ In this tutorial we're going to guide you through  . . . 1 Paragraph with minimu
 
 You should write a summary of what will be covered in this topic and the objective.
 
-Whenever you want to indicate the user to go to a site please de state the importance of the information and the url in this format [Official Site](http://www.google.com)
+Whenever you want to indicate the user to go to a site please de state the importance of the information and the url in this format [Official Site](http://www.google.com).
 
 If you are looking forward to indicate a particular command to the user within a paragraph please state it in this form `sudo apt-get install`. Continue with your explanation.
 
@@ -76,8 +76,8 @@ You should write a summary of what will be covered in this topic and the objecti
 
 ## References
 
-[1] *Reference Title and [Reference Site Title](http://www.google.com)*
+[1] *Reference Title and [Reference Site Title](http://www.google.com).*
 
-[2] *Reference Title and [Reference Site Title](http://www.google.com)*
+[2] *Reference Title and [Reference Site Title](http://www.google.com).*
 
-[3] *Reference Title and [Reference Site Title](http://www.google.com)*
+[3] *Reference Title and [Reference Site Title](http://www.google.com).*
