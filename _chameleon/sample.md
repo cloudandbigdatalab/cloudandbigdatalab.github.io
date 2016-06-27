@@ -10,6 +10,30 @@ In this tutorial we're going to guide you through  . . . 1 Paragraph with minimu
 
 You should write a summary of what will be covered in this topic and the objective.
 
+Whenever you want to indicate the user to go to a site please de state the importance of the information and the url in this format [Official Site](http://www.google.com)
+
+If you are looking forward to indicate a particular command to the user within a paragraph please state it in this form `sudo apt-get install`. Continue with your explanation.
+
+If you want to guide the user into typing multiple commands please use a box and provide an explanation in this paragraph that tells the user the importance or objective of the commands instructed to type:
+
+```sh
+# You can add aditional comments before every step to make sure the user understands the step by step procedure.
+sudo apt-get update
+
+# You can upgrade your python by using:
+sudo apt-get upgrade python
+```
+
+If you look forward to please review the following table:
+
+\# | Description | Time (mins)
+---|-------------|------------
+1 | Item Number 1 | 10
+2 | Item Number 2 | 10
+3 | Item Number 3 | 10
+**Table 1.-** The Title of Your Table
+
+
 #### Sub-title 1
 
 Describe the contents of your sub-title.
@@ -20,6 +44,7 @@ List of points that do not need a description should be stated as:
 - Point number 2
 - Point number 3
 
+
 List of definitions should be stated as:
 
 **Definition Number 1:** The definition of this is the following.
@@ -27,6 +52,15 @@ List of definitions should be stated as:
 **Definition Number 2:** The definition of this is the following.
 
 **Definition Number 3:** The definition of this is the following.
+
+
+Notes should be numbered and formated s definitions.
+
+**Important Note 1:** My note is the following.
+
+**Important Note 2:** My note is the following.
+
+**Important Note 2:** My note is the following.
 
 ## Topic 2
 
