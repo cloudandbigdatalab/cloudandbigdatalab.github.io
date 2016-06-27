@@ -4,23 +4,29 @@ Your video window
 
 # Lab X Your Lab Title
 
-In this tutorial we're going to guide you through  . . . 1 Paragraph with minimum 4 lines with a summary of the contents that will be reviewed and the objective to achieve at the end of the lab
+In this tutorial we're going to guide you through  . . . 1 Paragraph with minimum 4 lines with a summary of the contents that will be reviewed and the objective to achieve at the end of the lab.
 
 ## Topic 1
 
-You should write a summary of what will be covered in this topic and the objective
+You should write a summary of what will be covered in this topic and the objective.
+
+### Subtitle 1
+
+Describe the contents of your sub-title.
+
+
 
 ## Topic 2
 
-You should write a summary of what will be covered in this topic and the objective
+You should write a summary of what will be covered in this topic and the objective.
 
-## Topic 1
+## Topic 3
 
-You should write a summary of what will be covered in this topic and the objective
+You should write a summary of what will be covered in this topic and the objective.
 
-## Topic 2
+## Topic 4
 
-You should write a summary of what will be covered in this topic and the objective
+You should write a summary of what will be covered in this topic and the objective.
 
 ## Prerequisites
 
