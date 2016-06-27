@@ -76,8 +76,8 @@ You should write a summary of what will be covered in this topic and the objecti
 
 ## References
 
-**Reference 1. * Reference Title and [Reference Site Title](http://www.google.com)
+[1] *Reference Title and [Reference Site Title](http://www.google.com)*
 
-**Reference 2. * Reference Title and [Reference Site Title](http://www.google.com)
+[2] *Reference Title and [Reference Site Title](http://www.google.com)*
 
-**Reference 3. * Reference Title and [Reference Site Title](http://www.google.com)
+[3] *Reference Title and [Reference Site Title](http://www.google.com)*
