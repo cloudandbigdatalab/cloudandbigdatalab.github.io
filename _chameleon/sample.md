@@ -14,7 +14,19 @@ You should write a summary of what will be covered in this topic and the objecti
 
 Describe the contents of your sub-title.
 
+List of points that do not need a description should be stated as:
 
+- Point number 1
+- Point number 2
+- Point number 3
+
+List of definitions should be stated as:
+
+**Definition Number 1:** The definition of this is the following.
+
+**Definition Number 2:** The definition of this is the following.
+
+**Definition Number 3:** The definition of this is the following.
 
 ## Topic 2
 
