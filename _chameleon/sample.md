@@ -1,6 +1,26 @@
-# Your Lab Title
+# Lab X Your Lab Title
 
-In this tutorial we're going to guide you through the fundamentals of using Docker on Chameleon Cloud. You should already be familiar with managing resources on Chameleon Cloud, if not follow the "Getting Started" tutorial. At the end of this tutorial you will have setup a demo website utilizing 5 Docker containers and 2 physical hosts.
+Your video window
+
+# Lab X Your Lab Title
+
+In this tutorial we're going to guide you through  . . . 1 Paragraph with minimum 4 lines with a summary of the contents that will be reviewed and the objective to achieve at the end of the lab
+
+## Topic 1
+
+You should write a summary of what will be covered in this topic and the objective
+
+## Topic 2
+
+You should write a summary of what will be covered in this topic and the objective
+
+## Topic 1
+
+You should write a summary of what will be covered in this topic and the objective
+
+## Topic 2
+
+You should write a summary of what will be covered in this topic and the objective
 
 ## Prerequisites
 
