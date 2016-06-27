@@ -1,8 +1,4 @@
----
-category: Dockers and Micro services
-title: Your Lab Title
-lab: https://github.com/cloudandbigdatalab/tutorial-cham-docker-1
----
+# Your Lab Title
 
 In this tutorial we're going to guide you through the fundamentals of using Docker on Chameleon Cloud. You should already be familiar with managing resources on Chameleon Cloud, if not follow the "Getting Started" tutorial. At the end of this tutorial you will have setup a demo website utilizing 5 Docker containers and 2 physical hosts.
 
