@@ -10,7 +10,7 @@ In this tutorial we're going to guide you through  . . . 1 Paragraph with minimu
 
 You should write a summary of what will be covered in this topic and the objective.
 
-### Subtitle 1
+#### Sub-title 1
 
 Describe the contents of your sub-title.
 
