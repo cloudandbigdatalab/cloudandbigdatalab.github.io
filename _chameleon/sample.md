@@ -24,14 +24,14 @@ sudo apt-get update
 sudo apt-get upgrade python
 ```
 
-If you look forward to please review the following table:
+If you want to place a  table use this format:
 
 \# | Description | Time (mins)
 ---|-------------|------------
 1 | Item Number 1 | 10
 2 | Item Number 2 | 10
 3 | Item Number 3 | 10
-**Table 1.-** The Title of Your Table
+**Table 1.-** The Title of Your Table.
 
 
 #### Sub-title 1
